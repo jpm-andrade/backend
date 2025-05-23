@@ -1,9 +1,18 @@
 import { Injectable } from '@nestjs/common';
 import { CreateActivityDto } from './dto/create-activity.dto';
 import { UpdateActivityDto } from './dto/update-activity.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Activity } from './entities/activity.entity';
 
 @Injectable()
 export class ActivitiesService {
+
+  constructor(
+    @InjectRepository(Activity)
+    private readonly userRepository: Repository<Activity>,
+  ) {}
+
   create(createActivityDto: CreateActivityDto) {
     return 'This action adds a new activity';
   }

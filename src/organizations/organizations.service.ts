@@ -1,9 +1,18 @@
 import { Injectable } from '@nestjs/common';
 import { CreateOrganizationDto } from './dto/create-organization.dto';
 import { UpdateOrganizationDto } from './dto/update-organization.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Organization } from './entities/organization.entity';
 
 @Injectable()
 export class OrganizationsService {
+
+  constructor(
+    @InjectRepository(Organization)
+    private readonly userRepository: Repository<Organization>,
+  ) {}
+
   create(createOrganizationDto: CreateOrganizationDto) {
     return 'This action adds a new organization';
   }

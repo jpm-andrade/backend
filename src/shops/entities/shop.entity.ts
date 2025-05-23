@@ -1,7 +1,8 @@
 import { Customer } from 'src/customers/entities/customer.entity';
 import { Employee } from 'src/employees/entities/employee.entity';
+import { Organization } from 'src/organizations/entities/organization.entity';
 import { User } from 'src/users/entities/user.entity';
-import { Entity, Column, PrimaryGeneratedColumn, OneToOne, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToOne, CreateDateColumn, UpdateDateColumn, OneToMany, ManyToOne } from 'typeorm';
 
 @Entity()
 export class Shop {
@@ -17,19 +18,19 @@ export class Shop {
   @Column()
   country: string;
 
-  @OneToMany(type => Employee, employees => employees.id)
+  @OneToMany(() => Employee, (employees) => employees.shop)
   employees: Employee[];
 
-  @OneToMany(type => Customer, customers => customers.id)
-  customers: Customer[];
+  @ManyToOne(() => Organization, (organization)=> organization.id)
+  organization: Organization
 
-  @OneToOne(type => User)
+  @OneToOne(() => User)
   createdBy: User
 
   @CreateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)" })
   createdAt: Date;
 
-  @OneToOne(type => User)
+  @OneToOne(() => User)
   updatedBy: User
 
   @UpdateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)" })

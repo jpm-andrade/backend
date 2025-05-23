@@ -1,3 +1,4 @@
+import { Customer } from 'src/customers/entities/customer.entity';
 import { Shop } from 'src/shops/entities/shop.entity';
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 
@@ -15,6 +16,10 @@ export class Organization {
   @Column({ default: true })
   isActive: boolean;
 
-  @OneToMany(type => Shop, shops => shops.id)
+  @OneToMany(() => Shop, (shops) => shops.organization)
   shops: Shop[];
+
+  @OneToMany(() => Customer, (customer) => customer.organization)
+  customer: Customer[];
+
 }

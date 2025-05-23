@@ -1,5 +1,6 @@
+import { Organization } from 'src/organizations/entities/organization.entity';
 import { User } from 'src/users/entities/user.entity';
-import { Entity, Column, PrimaryGeneratedColumn, OneToOne, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToOne, CreateDateColumn, UpdateDateColumn, JoinColumn, ManyToOne } from 'typeorm';
 
 @Entity()
 export class Customer {
@@ -24,13 +25,19 @@ export class Customer {
   @Column()
   referedFrom: string;
 
-  @OneToOne(type => User)
+  @ManyToOne(() => Organization, { nullable: false })
+  @JoinColumn()
+  organization: Organization;
+
+
+
+  @OneToOne(() => User)
   createdBy: User
 
   @CreateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)" })
   createdAt: Date;
 
-  @OneToOne(type => User)
+  @OneToOne(() => User)
   updatedBy: User
 
   @UpdateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)" })

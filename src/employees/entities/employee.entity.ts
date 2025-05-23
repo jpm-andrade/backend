@@ -1,5 +1,6 @@
+import { Shop } from 'src/shops/entities/shop.entity';
 import { User } from 'src/users/entities/user.entity';
-import { Entity, Column, PrimaryGeneratedColumn, OneToOne, CreateDateColumn, UpdateDateColumn, ManyToOne } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToOne, CreateDateColumn, UpdateDateColumn, ManyToOne, OneToMany } from 'typeorm';
 
 @Entity()
 export class Employee {
@@ -26,6 +27,9 @@ export class Employee {
 
   @Column()
   skills: string[];
+
+  @ManyToOne(() => Shop, (shop)=> shop.employees)
+  shop: Shop;
 
   @OneToOne(type => User)
   createdBy: User
