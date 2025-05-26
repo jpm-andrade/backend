@@ -12,17 +12,19 @@ import { BookingsModule } from './bookings/bookings.module';
 import { BookingTypeModule } from './booking-type/booking-type.module';
 import { ActivityTypeModule } from './activity-type/activity-type.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { join } from 'path';
+import { LanguagesModule } from './languages/languages.module';
 
 @Module({
   imports: [
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: 'localhost',
-      port: 3306,
+      port: 3309,
       username: 'root',
-      password: 'root',
-      database: 'test',
-      entities: [],
+      password:'root',
+      database: 'be-db',
+      entities: [join(__dirname, '**', '*.entity.{ts,js}')],
       synchronize: true,
     }),
     UsersModule,
@@ -34,7 +36,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     ShopsModule,
     BookingsModule,
     BookingTypeModule,
-    ActivityTypeModule
+    ActivityTypeModule,
+    LanguagesModule
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -1,6 +1,6 @@
 import { Organization } from 'src/organizations/entities/organization.entity';
 import { User } from 'src/users/entities/user.entity';
-import { Entity, Column, PrimaryGeneratedColumn, OneToOne, CreateDateColumn, UpdateDateColumn, JoinColumn, ManyToOne } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToOne, CreateDateColumn, UpdateDateColumn, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 
 @Entity()
 export class Customer {
@@ -28,8 +28,6 @@ export class Customer {
   @ManyToOne(() => Organization, { nullable: false })
   @JoinColumn()
   organization: Organization;
-
-
 
   @OneToOne(() => User)
   createdBy: User

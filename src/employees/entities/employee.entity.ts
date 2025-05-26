@@ -1,3 +1,4 @@
+import { Language } from 'src/languages/entities/language.entity';
 import { Shop } from 'src/shops/entities/shop.entity';
 import { User } from 'src/users/entities/user.entity';
 import { Entity, Column, PrimaryGeneratedColumn, OneToOne, CreateDateColumn, UpdateDateColumn, ManyToOne, OneToMany } from 'typeorm';
@@ -22,11 +23,8 @@ export class Employee {
   @Column()
   country: string;
 
-  @Column()
-  language: string[];
-
-  @Column()
-  skills: string[];
+  @OneToMany(() => Language, (language) => language.employee)
+  languange: Language[]
 
   @ManyToOne(() => Shop, (shop)=> shop.employees)
   shop: Shop;

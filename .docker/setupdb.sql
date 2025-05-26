@@ -1,1 +1,1 @@
-CREATE DATABASE IF NOT EXISTS huddle-portifolio-tracker;
+CREATE DATABASE IF NOT EXISTS be-db;

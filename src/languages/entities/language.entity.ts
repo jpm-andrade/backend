@@ -1,27 +1,20 @@
 import { Employee } from 'src/employees/entities/employee.entity';
-import { Organization } from 'src/organizations/entities/organization.entity';
 import { User } from 'src/users/entities/user.entity';
-import { Entity, Column, PrimaryGeneratedColumn, OneToOne, CreateDateColumn, UpdateDateColumn, OneToMany, ManyToOne } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToOne, CreateDateColumn, UpdateDateColumn, ManyToOne, OneToMany } from 'typeorm';
 
 @Entity()
-export class Shop {
+export class Language {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
-  name: string;
+  label: string;
 
   @Column()
-  location: string;
+  shortLabel: string;
 
-  @Column()
-  country: string;
-
-  @OneToMany(() => Employee, (employees) => employees.shop)
-  employees: Employee[];
-
-  @ManyToOne(() => Organization, (organization)=> organization.id)
-  organization: Organization
+  @ManyToOne(() => Employee, (employee)=> employee.languange)
+  employee: Employee;
 
   @OneToOne(() => User)
   createdBy: User
