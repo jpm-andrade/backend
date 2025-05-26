@@ -16,10 +16,10 @@ export class Organization {
   @Column({ default: true })
   isActive: boolean;
 
-  @OneToMany(() => Shop, (shops) => shops.organization)
+  @OneToMany(() => Shop, (shops) => shops.organization, {nullable: true})
   shops: Shop[];
 
-  @OneToMany(() => Customer, (customer) => customer.organization)
+  @OneToMany(() => Customer, (customer) => customer.organization, {nullable: true})
   customer: Customer[];
 
 }

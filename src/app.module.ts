@@ -14,6 +14,7 @@ import { ActivityTypeModule } from './activity-type/activity-type.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { join } from 'path';
 import { LanguagesModule } from './languages/languages.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -37,7 +38,8 @@ import { LanguagesModule } from './languages/languages.module';
     BookingsModule,
     BookingTypeModule,
     ActivityTypeModule,
-    LanguagesModule
+    LanguagesModule,
+    AuthModule
   ],
   controllers: [AppController],
   providers: [AppService],

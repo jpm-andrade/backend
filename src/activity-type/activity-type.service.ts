@@ -10,7 +10,7 @@ export class ActivityTypeService {
 
   constructor(
     @InjectRepository(ActivityType)
-    private readonly userRepository: Repository<ActivityType>,
+    private readonly activityTypeRepository: Repository<ActivityType>,
   ) {}
 
 

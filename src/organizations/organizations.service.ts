@@ -10,15 +10,21 @@ export class OrganizationsService {
 
   constructor(
     @InjectRepository(Organization)
-    private readonly userRepository: Repository<Organization>,
+    private readonly organizationRepository: Repository<Organization>,
   ) {}
 
-  create(createOrganizationDto: CreateOrganizationDto) {
-    return 'This action adds a new organization';
+  create(createOrganizationDto: CreateOrganizationDto):Promise<Organization> {
+    const organization = new Organization()
+
+    organization.name = "Demo";
+    organization.location= "Demo Land"
+    organization.isActive = true
+
+    return this.organizationRepository.save(organization);
   }
 
   findAll() {
-    return `This action returns all organizations`;
+    return this.organizationRepository.find();
   }
 
   findOne(id: number) {
