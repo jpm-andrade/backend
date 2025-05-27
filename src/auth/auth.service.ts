@@ -1,33 +1,45 @@
-import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
-import { UsersService } from 'src/users/users.service';
+import { Injectable, UnauthorizedException } from "@nestjs/common";
+import { UsersService } from "../users/users.service";
 import { JwtService } from '@nestjs/jwt';
-
+import { CreateUserDto } from "src/users/dto/create-user.dto";
+import * as bcrypt from 'bcrypt';
 @Injectable()
 export class AuthService {
     constructor(
-        private usersService: UsersService, 
+        private usersService: UsersService,
         private jwtService: JwtService
     ) { }
 
-    async login(username: string, password: string): Promise<any> {
-        const user = await this.usersService.findByUsername(username);
+    saltOrRounds: number = 10;
 
-        // If no user is found, throw an error
+    async signIn(email: string, pass: string) {
+        const user = await this.usersService.findByEmail(email);
+
         if (!user) {
-            throw new NotFoundException(`No user found for username: ${username}`);
+            throw new UnauthorizedException();
         }
 
-        // Step 2: Check if the password is correct
-        const isPasswordValid = user.password === password;
+        const isMatch = await bcrypt.compare(pass, user?.password);
 
-        // If password does not match, throw an error
-        if (!isPasswordValid) {
-            throw new UnauthorizedException('Invalid password');
+        if (isMatch) {
+            throw new UnauthorizedException();
         }
-
-        // Step 3: Generate a JWT containing the user's ID and return it
+        const payload = { sub: user.id, email: user.email };
         return {
-            accessToken: this.jwtService.sign({ userId: user.id }),
+            access_token: await this.jwtService.signAsync(payload),
         };
+    }
+
+    async signUp(payload: CreateUserDto) {
+
+        const hashPass = await bcrypt.hash(payload.password, this.saltOrRounds)
+
+        let data = {
+            ...payload,
+            password: hashPass
+        }
+
+        const user = await this.usersService.create(data);
+        return user;
     }
 }

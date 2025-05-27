@@ -1,25 +1,31 @@
 import { Module } from '@nestjs/common';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
-import { UsersModule } from 'src/users/users.module';
-import { PassportModule } from '@nestjs/passport';
+import { UsersModule } from '../users/users.module';
 import { JwtModule } from '@nestjs/jwt';
-import { JwtStrategy } from './jwt.strategy';
-
-
-export const jwtSecret = 'zjP9h6ZI5LoSKCRj';
-
-
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { jwtConstants } from './constants/constants';
+import { APP_GUARD } from '@nestjs/core';
+import { AuthGuard } from './auth.guard';
+import { User } from 'src/users/entities/user.entity';
 @Module({
-  imports:[
+  imports: [
     UsersModule,
-    PassportModule,
     JwtModule.register({
-      secret: jwtSecret,
-      signOptions: {expiresIn: '1d'}
-    })
+      global: true,
+      secret: jwtConstants.secret,
+      signOptions: { expiresIn: '1d' },
+    }),
+    TypeOrmModule.forFeature([User]),
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy]
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard,
+    },
+    AuthService
+  ],
+  exports: [AuthService]
 })
-export class AuthModule {}
+export class AuthModule { }

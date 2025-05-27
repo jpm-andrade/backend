@@ -4,21 +4,37 @@ import { UpdateShopDto } from './dto/update-shop.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Shop } from './entities/shop.entity';
+import { OrganizationsService } from 'src/organizations/organizations.service';
 
 @Injectable()
 export class ShopsService {
 
   constructor(
     @InjectRepository(Shop)
-    private readonly userRepository: Repository<Shop>,
+    private readonly shopRepository: Repository<Shop>,
+    private readonly organizationService: OrganizationsService
   ) {}
 
-  create(createShopDto: CreateShopDto) {
-    return 'This action adds a new shop';
+  async create(createShopDto: CreateShopDto): Promise<Shop> {
+    const organization = await this.organizationService.findOne(createShopDto.organizationId)
+
+    if(!organization){
+      throw Error() 
+    }
+
+    const shop = new Shop()
+
+    shop.country = createShopDto.country
+    shop.createdAt = new Date()
+    shop.location = createShopDto.location
+    shop.organization = organization
+    shop.name = createShopDto.name
+
+    return this.shopRepository.save(shop)
   }
 
   findAll() {
-    return `This action returns all shops`;
+    return this.shopRepository.find();
   }
 
   findOne(id: number) {

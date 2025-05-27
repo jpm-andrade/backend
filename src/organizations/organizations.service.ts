@@ -16,8 +16,8 @@ export class OrganizationsService {
   create(createOrganizationDto: CreateOrganizationDto):Promise<Organization> {
     const organization = new Organization()
 
-    organization.name = "Demo";
-    organization.location= "Demo Land"
+    organization.name = createOrganizationDto.name;
+    organization.location= createOrganizationDto.location
     organization.isActive = true
 
     return this.organizationRepository.save(organization);
@@ -27,8 +27,8 @@ export class OrganizationsService {
     return this.organizationRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} organization`;
+  findOne(id: number):Promise<Organization | null> {
+    return this.organizationRepository.findOneBy({id: id});
   }
 
   update(id: number, updateOrganizationDto: UpdateOrganizationDto) {
