@@ -22,4 +22,6 @@ export class Organization {
   @OneToMany(() => Customer, (customer) => customer.organization, {nullable: true})
   customer: Customer[];
 
+  
+
 }

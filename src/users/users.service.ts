@@ -5,6 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import * as bcrypt from 'bcrypt';
+import { HTTP_CODE_METADATA } from '@nestjs/common/constants';
 
 export const roundsOfHashing = 10;
 @Injectable()

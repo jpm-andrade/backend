@@ -15,6 +15,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { join } from 'path';
 import { LanguagesModule } from './languages/languages.module';
 import { AuthModule } from './auth/auth.module';
+import { AuthorizedShopsModule } from './authorized-shops/authorized-shops.module';
 
 @Module({
   imports: [
@@ -39,7 +40,8 @@ import { AuthModule } from './auth/auth.module';
     BookingTypeModule,
     ActivityTypeModule,
     LanguagesModule,
-    AuthModule
+    AuthModule,
+    AuthorizedShopsModule
   ],
   controllers: [AppController],
   providers: [AppService],

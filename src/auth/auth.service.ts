@@ -14,14 +14,13 @@ export class AuthService {
 
     async signIn(email: string, pass: string) {
         const user = await this.usersService.findByEmail(email);
-
         if (!user) {
             throw new UnauthorizedException();
         }
 
         const isMatch = await bcrypt.compare(pass, user?.password);
 
-        if (isMatch) {
+        if (!isMatch) {
             throw new UnauthorizedException();
         }
         const payload = { sub: user.id, email: user.email };

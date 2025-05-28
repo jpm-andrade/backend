@@ -4,6 +4,9 @@ import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { LoginDto } from "./dto/login.dto";
 import { BaseUser } from "src/users/dto/base-user.dto";
 import { Public } from "./strategy/public-strategy";
+import { SignUpDto } from "./dto/signup.dto";
+
+
 @Controller("auth")
 @ApiTags("auth")
 export class AuthController {
@@ -29,7 +32,7 @@ export class AuthController {
     description: "The record found",
     type: [BaseUser],
   })
-  signUp(@Body() signUpDto: Record<string, any>) {
+  signUp(@Body() signUpDto: SignUpDto) {
     const payload = {
       username: signUpDto.username, 
       email: signUpDto.email, 

@@ -25,6 +25,9 @@ export class Booking {
   @Column()
   referedFrom: string;
 
+  @Column({ default: false })
+  isCanceled: boolean
+
   @OneToMany(() => Activity, (activities) => activities.booking)
   activities: Activity[];
 
@@ -45,6 +48,7 @@ export class Booking {
   })
   @JoinColumn()
   bookingType: BookingType;
+
 
   @OneToOne(() => User)
   createdBy: User

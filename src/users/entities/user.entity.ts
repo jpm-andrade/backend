@@ -1,5 +1,6 @@
 
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { AuthorizedShop } from 'src/authorized-shops/entities/authorized-shop.entity';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
 
 @Entity()
 export class User {
@@ -17,4 +18,7 @@ export class User {
 
   @Column({ default: true })
   isActive: boolean;
+
+  @ManyToOne(() => AuthorizedShop, (authShop)=> authShop.user)
+  authShop: AuthorizedShop[]
 }

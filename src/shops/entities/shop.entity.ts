@@ -20,7 +20,7 @@ export class Shop {
   @OneToMany(() => Employee, (employees) => employees.shop)
   employees: Employee[];
 
-  @ManyToOne(() => Organization, (organization)=> organization.id)
+  @ManyToOne(() => Organization, (organization)=> organization.shops)
   organization: Organization
 
   @OneToOne(() => User)
