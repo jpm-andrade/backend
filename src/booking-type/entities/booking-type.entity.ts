@@ -1,4 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToOne } from 'typeorm';
+import { Organization } from 'src/organizations/entities/organization.entity';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToOne, OneToOne } from 'typeorm';
 
 @Entity()
 export class BookingType {
@@ -10,4 +11,7 @@ export class BookingType {
 
   @Column()
   label: string;
+
+  @OneToOne(()=>Organization)
+  organization: Organization
 }

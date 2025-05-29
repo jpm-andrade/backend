@@ -10,7 +10,7 @@ export class BookingsService {
 
   constructor(
     @InjectRepository(Booking)
-    private readonly userRepository: Repository<Booking>,
+    private readonly bookingRepository: Repository<Booking>,
   ) {}
 
 

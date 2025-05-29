@@ -4,29 +4,64 @@ import { UpdateBookingTypeDto } from './dto/update-booking-type.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { BookingType } from './entities/booking-type.entity';
+import { OrganizationsService } from 'src/organizations/organizations.service';
 
 @Injectable()
 export class BookingTypeService {
 
   constructor(
     @InjectRepository(BookingType)
-    private readonly userRepository: Repository<BookingType>,
-  ) {}
+    private readonly bookingTypeRepository: Repository<BookingType>,
+    private readonly organizationService: OrganizationsService
 
-  create(createBookingTypeDto: CreateBookingTypeDto) {
-    return 'This action adds a new bookingType';
+  ) { }
+
+  async create(createBookingTypeDto: CreateBookingTypeDto) {
+    const organization = await this.organizationService.findOne(createBookingTypeDto.organizationId)
+
+    if (!organization) {
+      throw Error()
+    }
+
+    const bookingType = new BookingType();
+
+    bookingType.category = createBookingTypeDto.category
+    bookingType.label = createBookingTypeDto.label
+    bookingType.organization = organization
+
+    return this.bookingTypeRepository.save(bookingType);
   }
 
   findAll() {
     return `This action returns all bookingType`;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} bookingType`;
+  findBasedOnOrganization(id: number) {
+    return this.bookingTypeRepository.find(
+      {
+        relations: {
+          organization: true
+        },
+        where: {
+          organization: {
+            id: id
+          }
+        }
+      }
+    );;
   }
 
-  update(id: number, updateBookingTypeDto: UpdateBookingTypeDto) {
-    return `This action updates a #${id} bookingType`;
+  async update(id: number, updateBookingTypeDto: UpdateBookingTypeDto) {
+    let bookingType = await this.bookingTypeRepository.findOneBy({ id: id })
+
+    if (!bookingType) {
+
+    } else {
+      bookingType.category = updateBookingTypeDto.category
+      bookingType.label = updateBookingTypeDto.label
+      return this.bookingTypeRepository.save(bookingType);
+    }
+
   }
 
   remove(id: number) {

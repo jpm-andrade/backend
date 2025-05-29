@@ -37,9 +37,24 @@ export class ShopsService {
     return this.shopRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} shop`;
+  async findOrganization(id:number) {
+    return this.shopRepository.find(
+      {
+        relations:{
+          organization:true
+        },
+        where:{
+          organization:{
+            id: id
+          }
+        }
+      }
+    );
   }
+
+  async findOne(id:number) {
+    return this.shopRepository.findOneBy({id:id})
+  }  
 
   update(id: number, updateShopDto: UpdateShopDto) {
     return `This action updates a #${id} shop`;
