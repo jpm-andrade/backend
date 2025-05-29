@@ -14,7 +14,7 @@ export class Booking {
   checkInDate: Date;
 
   @Column({nullable: true})
-  certificationLevel: string;
+  certificationLevel?: string;
 
   @Column()
   language: string

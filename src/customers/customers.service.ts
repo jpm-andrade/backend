@@ -11,7 +11,7 @@ export class CustomersService {
   
   constructor(
     @InjectRepository(Customer)
-    private readonly userRepository: Repository<Customer>,
+    private readonly custoemrRepository: Repository<Customer>,
   ) {}
 
   create(createCustomerDto: CreateCustomerDto) {
@@ -23,7 +23,7 @@ export class CustomersService {
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} customer`;
+    return this.custoemrRepository.findOneBy({id:id});
   }
 
   update(id: number, updateCustomerDto: UpdateCustomerDto) {

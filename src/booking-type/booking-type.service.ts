@@ -43,6 +43,10 @@ export class BookingTypeService {
     );;
   }
 
+  findOne(id: number) {
+    return this.bookingTypeRepository.findOneBy({id:id});;
+  }
+
   async findBasedOnShop(id: number) {
     return await this.bookingTypeRepository.find(
       {

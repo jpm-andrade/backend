@@ -14,7 +14,7 @@ export class ActivitiesService {
   ) {}
 
   create(createActivityDto: CreateActivityDto) {
-    return 'This action adds a new activity';
+    const activity = new Activity()
   }
 
   findAll() {
