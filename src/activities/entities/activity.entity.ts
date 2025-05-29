@@ -14,9 +14,11 @@ export class Activity {
   id: number;
 
   @OneToOne(()=> Employee)
+  @JoinColumn()
   employee: Employee;
 
   @OneToOne(()=> ActivityType)
+  @JoinColumn()
   activityType: ActivityType;
 
   @ManyToOne(() => Booking, (booking) => booking.activities)
@@ -38,12 +40,14 @@ export class Activity {
   referedFrom: string;
 
   @OneToOne(() => User)
+  @JoinColumn()
   createdBy: User
 
   @CreateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)" })
   createdAt: Date;
 
   @OneToOne(() => User)
+  @JoinColumn()
   updatedBy: User
 
   @UpdateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)" })

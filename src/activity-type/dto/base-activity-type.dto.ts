@@ -1,6 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger";
 
-export class BaseBookingType {
+export class BaseActivityType {
+
     @ApiProperty()
     id?: number;
 
@@ -11,5 +12,6 @@ export class BaseBookingType {
     label: string;
 
     @ApiProperty()
-    shopId: number;
+    shopId: number
+
 }

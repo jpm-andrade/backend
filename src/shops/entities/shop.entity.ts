@@ -1,7 +1,9 @@
+import { ActivityType } from 'src/activity-type/entities/activity-type.entity';
+import { BookingType } from 'src/booking-type/entities/booking-type.entity';
 import { Employee } from 'src/employees/entities/employee.entity';
 import { Organization } from 'src/organizations/entities/organization.entity';
 import { User } from 'src/users/entities/user.entity';
-import { Entity, Column, PrimaryGeneratedColumn, OneToOne, CreateDateColumn, UpdateDateColumn, OneToMany, ManyToOne } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToOne, CreateDateColumn, UpdateDateColumn, OneToMany, ManyToOne, JoinColumn } from 'typeorm';
 
 @Entity()
 export class Shop {
@@ -23,13 +25,21 @@ export class Shop {
   @ManyToOne(() => Organization, (organization)=> organization.shops)
   organization: Organization
 
+  @OneToMany(() => ActivityType, (activityType) => activityType.shop)
+  activityTypes: ActivityType[]
+
+  @OneToMany(() => ActivityType, (bookingTypes) => bookingTypes.shop)
+  bookingTypes: BookingType[]
+
   @OneToOne(() => User)
+  @JoinColumn()
   createdBy: User
 
   @CreateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)" })
   createdAt: Date;
 
   @OneToOne(() => User)
+  @JoinColumn()
   updatedBy: User
 
   @UpdateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)" })

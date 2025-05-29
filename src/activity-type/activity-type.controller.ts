@@ -2,7 +2,10 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { ActivityTypeService } from './activity-type.service';
 import { CreateActivityTypeDto } from './dto/create-activity-type.dto';
 import { UpdateActivityTypeDto } from './dto/update-activity-type.dto';
+import { Public } from 'src/auth/strategy/public-strategy';
 
+
+@Public()
 @Controller('activity-type')
 export class ActivityTypeController {
   constructor(private readonly activityTypeService: ActivityTypeService) {}
@@ -20,6 +23,11 @@ export class ActivityTypeController {
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.activityTypeService.findOne(+id);
+  }
+
+  @Get('/shop/:id')
+  findByShopId(@Param('id') id: string) {
+    return this.activityTypeService.findBasedOnShop(+id);
   }
 
   @Patch(':id')

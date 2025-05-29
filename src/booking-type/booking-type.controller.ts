@@ -2,7 +2,10 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { BookingTypeService } from './booking-type.service';
 import { CreateBookingTypeDto } from './dto/create-booking-type.dto';
 import { UpdateBookingTypeDto } from './dto/update-booking-type.dto';
+import { Public } from 'src/auth/strategy/public-strategy';
 
+
+@Public()
 @Controller('booking-type')
 export class BookingTypeController {
   constructor(private readonly bookingTypeService: BookingTypeService) {}
@@ -19,7 +22,12 @@ export class BookingTypeController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.bookingTypeService.findOne(+id);
+    return this.bookingTypeService.findBasedOnShop(+id);
+  }
+
+  @Get('/shop/:id')
+  findByShopId(@Param('id') id: string) {
+    return this.bookingTypeService.findBasedOnShop(+id);
   }
 
   @Patch(':id')

@@ -5,6 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { BookingType } from './entities/booking-type.entity';
 import { OrganizationsService } from 'src/organizations/organizations.service';
+import { ShopsService } from 'src/shops/shops.service';
 
 @Injectable()
 export class BookingTypeService {
@@ -12,14 +13,14 @@ export class BookingTypeService {
   constructor(
     @InjectRepository(BookingType)
     private readonly bookingTypeRepository: Repository<BookingType>,
-    private readonly organizationService: OrganizationsService
+    private readonly shopService: ShopsService
 
   ) { }
 
   async create(createBookingTypeDto: CreateBookingTypeDto) {
-    const organization = await this.organizationService.findOne(createBookingTypeDto.organizationId)
+    const shop = await this.shopService.findOne(createBookingTypeDto.shopId)
 
-    if (!organization) {
+    if (!shop) {
       throw Error()
     }
 
@@ -27,23 +28,29 @@ export class BookingTypeService {
 
     bookingType.category = createBookingTypeDto.category
     bookingType.label = createBookingTypeDto.label
-    bookingType.organization = organization
+    bookingType.shop = shop
 
     return this.bookingTypeRepository.save(bookingType);
   }
 
   findAll() {
-    return `This action returns all bookingType`;
-  }
-
-  findBasedOnOrganization(id: number) {
     return this.bookingTypeRepository.find(
       {
         relations: {
-          organization: true
+          shop: true
+        },
+      }
+    );;
+  }
+
+  async findBasedOnShop(id: number) {
+    return await this.bookingTypeRepository.find(
+      {
+        relations: {
+          shop: true
         },
         where: {
-          organization: {
+          shop: {
             id: id
           }
         }

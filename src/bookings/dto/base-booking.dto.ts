@@ -8,7 +8,7 @@ export class BaseBooking {
     checkInDate: Date;
   
     @ApiProperty()
-    certificationLevel: string;
+    certificationLevel?: string;
   
     @ApiProperty()
     language: string

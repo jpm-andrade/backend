@@ -20,5 +20,6 @@ import { OrganizationsModule } from 'src/organizations/organizations.module';
   OrganizationsModule],
   controllers: [ShopsController],
   providers: [ShopsService],
+  exports:[ShopsService]
 })
 export class ShopsModule { }

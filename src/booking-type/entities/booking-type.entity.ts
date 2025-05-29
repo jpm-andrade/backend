@@ -1,5 +1,5 @@
-import { Organization } from 'src/organizations/entities/organization.entity';
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToOne, OneToOne } from 'typeorm';
+import { Shop } from 'src/shops/entities/shop.entity';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToOne, OneToOne, JoinColumn } from 'typeorm';
 
 @Entity()
 export class BookingType {
@@ -12,6 +12,7 @@ export class BookingType {
   @Column()
   label: string;
 
-  @OneToOne(()=>Organization)
-  organization: Organization
+  @ManyToOne(() => Shop, (shop) => shop.bookingTypes)
+  @JoinColumn()
+  shop: Shop
 }

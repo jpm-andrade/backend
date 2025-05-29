@@ -28,6 +28,9 @@ import { AuthorizedShopsModule } from './authorized-shops/authorized-shops.modul
       database: 'be-db',
       entities: [join(__dirname, '**', '*.entity.{ts,js}')],
       synchronize: true,
+      autoLoadEntities:true,
+      //dropSchema:true,
+      //debug: true
     }),
     UsersModule,
     OrganizationsModule,
