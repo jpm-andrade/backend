@@ -40,7 +40,7 @@ export class ActivityTypeService {
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} activityType`;
+    return this.activityTypeRepository.findOneBy({id:id});
   }
 
   findBasedOnShop(id: number) {

@@ -10,7 +10,7 @@ export class EmployeesService {
 
   constructor(
     @InjectRepository(Employee)
-    private readonly userRepository: Repository<Employee>,
+    private readonly employeeRepository: Repository<Employee>,
   ) {}
 
 
@@ -19,11 +19,11 @@ export class EmployeesService {
   }
 
   findAll() {
-    return `This action returns all employees`;
+    return this.employeeRepository.find();
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} employee`;
+    return this.employeeRepository.findOneBy({id:id});
   }
 
   update(id: number, updateEmployeeDto: UpdateEmployeeDto) {

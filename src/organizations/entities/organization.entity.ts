@@ -19,9 +19,4 @@ export class Organization {
   @OneToMany(() => Shop, (shops) => shops.organization, {nullable: true})
   shops: Shop[];
 
-  @OneToMany(() => Customer, (customer) => customer.organization, {nullable: true})
-  customer: Customer[];
-
-  
-
 }

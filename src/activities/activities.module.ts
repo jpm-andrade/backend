@@ -3,9 +3,24 @@ import { ActivitiesService } from './activities.service';
 import { ActivitiesController } from './activities.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Activity } from './entities/activity.entity';
+import { Employee } from 'src/employees/entities/employee.entity';
+import { ActivityType } from 'src/activity-type/entities/activity-type.entity';
+import { Booking } from 'src/bookings/entities/booking.entity';
+import { EmployeesModule } from 'src/employees/employees.module';
+import { ActivityTypeModule } from 'src/activity-type/activity-type.module';
+import { BookingsModule } from 'src/bookings/bookings.module';
 
 @Module({
-  imports:[TypeOrmModule.forFeature([Activity])],
+  imports:[TypeOrmModule.forFeature([
+    Activity,
+    Employee,
+    ActivityType,
+    Booking
+  ]),
+  EmployeesModule,
+  ActivityTypeModule,
+  BookingsModule
+],
   controllers: [ActivitiesController],
   providers: [ActivitiesService],
   exports: [ActivitiesService]

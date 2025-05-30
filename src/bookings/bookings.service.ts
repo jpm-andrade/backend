@@ -53,8 +53,8 @@ export class BookingsService {
     booking.customer = customer
     booking.bookingType = bookingType
 
-
-      return this.bookingRepository.save(booking);
+    
+    return this.bookingRepository.save(booking);
   }
 
   findAll() {
@@ -62,7 +62,7 @@ export class BookingsService {
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} booking`;
+    return this.bookingRepository.findOneBy({id:id});
   }
 
   update(id: number, updateBookingDto: UpdateBookingDto) {

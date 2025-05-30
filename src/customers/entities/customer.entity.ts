@@ -25,10 +25,6 @@ export class Customer {
   @Column()
   referedFrom: string;
 
-  @ManyToOne(() => Organization, { nullable: false })
-  @JoinColumn()
-  organization: Organization;
-
   @OneToOne(() => User)
   createdBy: User
 

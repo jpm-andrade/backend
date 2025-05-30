@@ -18,9 +18,6 @@ export class BaseBooking {
   
     @ApiProperty()
     referedFrom: string;
-  
-    @ApiProperty({ default: false })
-    isCanceled: boolean
 
     @ApiProperty()
     shopId: number;

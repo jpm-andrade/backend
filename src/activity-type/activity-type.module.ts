@@ -12,5 +12,6 @@ import { ShopsModule } from 'src/shops/shops.module';
 ],
   controllers: [ActivityTypeController],
   providers: [ActivityTypeService],
+  exports:[ActivityTypeService]
 })
 export class ActivityTypeModule { }

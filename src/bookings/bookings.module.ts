@@ -15,17 +15,16 @@ import { BookingTypeModule } from 'src/booking-type/booking-type.module';
 @Module({
   imports: [TypeOrmModule.forFeature([
     Booking,
-    Activity,
     Shop,
     Customer,
     BookingType
   ]),
-  ActivitiesModule,
   CustomersModule,
   ShopsModule,
   BookingTypeModule
 ],
   controllers: [BookingsController],
   providers: [BookingsService],
+  exports: [BookingsService]
 })
 export class BookingsModule {}

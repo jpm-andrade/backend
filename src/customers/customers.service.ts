@@ -4,6 +4,7 @@ import { UpdateCustomerDto } from './dto/update-customer.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Customer } from './entities/customer.entity';
+import { OrganizationsService } from 'src/organizations/organizations.service';
 
 @Injectable()
 export class CustomersService {
@@ -11,19 +12,27 @@ export class CustomersService {
   
   constructor(
     @InjectRepository(Customer)
-    private readonly custoemrRepository: Repository<Customer>,
+    private readonly customerRepository: Repository<Customer>,
   ) {}
 
-  create(createCustomerDto: CreateCustomerDto) {
-    return 'This action adds a new customer';
+  async create(createCustomerDto: CreateCustomerDto) {
+    const customer = new Customer()
+
+    customer.firstName = createCustomerDto.firstName
+    customer.lastName = createCustomerDto.lastName
+    customer.dateOfBirth = createCustomerDto.dateOfBirth
+    customer.gender = createCustomerDto.gender
+    customer.country = createCustomerDto.country
+    
+    return this.customerRepository.save(customer);
   }
 
   findAll() {
-    return `This action returns all customers`;
+    return this.customerRepository.find();
   }
 
   findOne(id: number) {
-    return this.custoemrRepository.findOneBy({id:id});
+    return this.customerRepository.findOneBy({id:id});
   }
 
   update(id: number, updateCustomerDto: UpdateCustomerDto) {
