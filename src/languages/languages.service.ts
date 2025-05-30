@@ -26,6 +26,12 @@ export class LanguagesService {
     return this.languageRepository.save(language);
   }
 
+  createBulk(createLanguageDto: CreateLanguageDto[]){
+    createLanguageDto.map((dto)=>{
+      this.create(dto)
+    })
+  }
+
   findAll() {
     return this.languageRepository.find();
   }

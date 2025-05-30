@@ -29,7 +29,9 @@ export class Employee {
   )
   employeeLanguages!: EmployeeLanguage[];
 
-  @ManyToOne(() => Shop, (shop) => shop.employees)
+  @ManyToOne(() => Shop, (shop) => shop.employees, {
+    eager:true
+  })
   shop: Shop;
 
   @OneToOne(() => User)

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateEmployeeDto } from './dto/create-employee.dto';
 import { UpdateEmployeeDto } from './dto/update-employee.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -6,6 +6,7 @@ import { Repository } from 'typeorm';
 import { Employee } from './entities/employee.entity';
 import { EmployeeLanguage } from 'src/employee-languages/entities/employee-language.entity';
 import { Language } from 'src/languages/entities/language.entity';
+import { Shop } from 'src/shops/entities/shop.entity';
 
 @Injectable()
 export class EmployeesService {
@@ -17,6 +18,8 @@ export class EmployeesService {
     private readonly employeeLanguageRepository: Repository<EmployeeLanguage>,
     @InjectRepository(Language)
     private readonly languageRepository: Repository<Language>,
+    @InjectRepository(Shop)
+    private readonly shopRepository: Repository<Shop>
 
 
   ) { }
@@ -25,11 +28,19 @@ export class EmployeesService {
   async create(createEmployeeDto: CreateEmployeeDto) {
     const employee = new Employee()
 
+    const shop = await this.shopRepository.findOneBy({id: createEmployeeDto.shopId})
+
+    if(!shop){
+      throw new NotFoundException(`Shop ${createEmployeeDto.shopId} not found`);
+
+    }
+
     employee.firstName = createEmployeeDto.firstName
     employee.lastName = createEmployeeDto.lastName
     employee.dateOfBirth = createEmployeeDto.dateOfBirth
     employee.gender = createEmployeeDto.gender
     employee.country = createEmployeeDto.country
+    employee.shop = shop
 
     const savedEmployee = await this.employeeRepository.save(employee)
 
@@ -55,6 +66,32 @@ export class EmployeesService {
 
   findOne(id: number) {
     return this.employeeRepository.findOneBy({ id: id });
+  }
+
+  findByShop(id: number) {
+    return this.employeeRepository.find({
+      relations:{
+        shop:true
+      },
+      where:{
+        shop:{
+          id:id
+        }
+      }
+    });
+  }
+
+  findByOrganization(id: number) {
+    return this.employeeRepository.find({
+      relations:{
+        shop:true
+      },
+      where:{
+        shop:{
+          id:id
+        }
+      }
+    });
   }
 
   update(id: number, updateEmployeeDto: UpdateEmployeeDto) {

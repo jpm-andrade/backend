@@ -2,7 +2,9 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { EmployeesService } from './employees.service';
 import { CreateEmployeeDto } from './dto/create-employee.dto';
 import { UpdateEmployeeDto } from './dto/update-employee.dto';
+import { Public } from 'src/auth/strategy/public-strategy';
 
+@Public()
 @Controller('employees')
 export class EmployeesController {
   constructor(private readonly employeesService: EmployeesService) {}
@@ -14,6 +16,16 @@ export class EmployeesController {
 
   @Get()
   findAll() {
+    return this.employeesService.findAll();
+  }
+
+  @Get('/shop/:id')
+  findByShop(@Param('id') id: string) {
+    return this.employeesService.findByShop(+id);
+  }
+
+  @Get('/organization/:id')
+  findByOrganization(@Param('id') id: string) {
     return this.employeesService.findAll();
   }
 
