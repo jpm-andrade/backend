@@ -22,7 +22,4 @@ export class BaseCustomer {
 
     @ApiProperty()
     referedFrom: string;
-
-    @ApiProperty()
-    booking: BaseBooking;
 }

@@ -16,6 +16,7 @@ import { join } from 'path';
 import { LanguagesModule } from './languages/languages.module';
 import { AuthModule } from './auth/auth.module';
 import { AuthorizedShopsModule } from './authorized-shops/authorized-shops.module';
+import { EmployeeLanguagesModule } from './employee-languages/employee-languages.module';
 
 @Module({
   imports: [
@@ -44,7 +45,8 @@ import { AuthorizedShopsModule } from './authorized-shops/authorized-shops.modul
     ActivityTypeModule,
     LanguagesModule,
     AuthModule,
-    AuthorizedShopsModule
+    AuthorizedShopsModule,
+    EmployeeLanguagesModule
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateActivityDto } from './dto/create-activity.dto';
 import { UpdateActivityDto } from './dto/update-activity.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -8,6 +8,9 @@ import { EmployeesService } from 'src/employees/employees.service';
 import { ActivityTypeService } from 'src/activity-type/activity-type.service';
 import { BookingsService } from 'src/bookings/bookings.service';
 import { CreateActivityInternal } from './dto/create-activity-internal.dto';
+import { Employee } from 'src/employees/entities/employee.entity';
+import { ActivityType } from 'src/activity-type/entities/activity-type.entity';
+import { Booking } from 'src/bookings/entities/booking.entity';
 
 @Injectable()
 export class ActivitiesService {
@@ -15,9 +18,12 @@ export class ActivitiesService {
   constructor(
     @InjectRepository(Activity)
     private readonly activityRepository: Repository<Activity>,
-    private readonly employeeService: EmployeesService,
-    private readonly activityTypeService: ActivityTypeService,
-    private readonly bookingsService: BookingsService
+    @InjectRepository(Employee)
+    private readonly employeeRepository: Repository<Employee>,
+    @InjectRepository(ActivityType)
+    private readonly activityTypeRepository: Repository<ActivityType>,
+    @InjectRepository(Booking)
+    private readonly bookingRepository: Repository<Booking>,
 
   ) { }
 
@@ -29,22 +35,22 @@ export class ActivitiesService {
   async create(createActivityDto: CreateActivityDto) {
     const activity = new Activity()
 
-    const employee = await this.employeeService.findOne(createActivityDto.employeeId)
+    const employee = await this.employeeRepository.findOneBy({id:createActivityDto.employeeId})
 
     if (!employee) {
-      throw Error()
+      throw new NotFoundException(`Employee ${createActivityDto.employeeId} not found`);
     }
 
-    const activityType = await this.activityTypeService.findOne(createActivityDto.activityTypeId)
+    const activityType = await this.activityTypeRepository.findOneBy({id:createActivityDto.activityTypeId})
 
     if (!activityType) {
-      throw Error()
+      throw new NotFoundException(`Activity Type ${createActivityDto.activityTypeId} not found`);
     }
 
-    const booking = await this.bookingsService.findOne(createActivityDto.bookingId)
+    const booking = await this.bookingRepository.findOneBy({id:createActivityDto.bookingId})
 
     if (!booking) {
-      throw Error()
+      throw new NotFoundException(`Booking ${createActivityDto.bookingId} not found`);
     }
 
     activity.employee = employee
@@ -67,16 +73,16 @@ export class ActivitiesService {
   async createInternal(createActivityDto: CreateActivityInternal) {
     const activity = new Activity()
 
-    const employee = await this.employeeService.findOne(createActivityDto.employeeId)
+    const employee = await this.employeeRepository.findOneBy({id:createActivityDto.employeeId})
 
     if (!employee) {
-      throw Error()
+      throw new NotFoundException(`Employee ${createActivityDto.employeeId} not found`);
     }
 
-    const activityType = await this.activityTypeService.findOne(createActivityDto.activityTypeId)
+    const activityType = await this.activityTypeRepository.findOneBy({id:createActivityDto.activityTypeId})
 
     if (!activityType) {
-      throw Error()
+      throw new NotFoundException(`Activity Type ${createActivityDto.employeeId} not found`);
     }
 
     activity.employee = employee

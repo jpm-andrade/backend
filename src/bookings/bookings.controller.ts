@@ -2,7 +2,10 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { BookingsService } from './bookings.service';
 import { CreateBookingDto } from './dto/create-booking.dto';
 import { UpdateBookingDto } from './dto/update-booking.dto';
+import { Public } from 'src/auth/strategy/public-strategy';
 
+
+@Public()
 @Controller('bookings')
 export class BookingsController {
   constructor(private readonly bookingsService: BookingsService) {}
@@ -21,6 +24,17 @@ export class BookingsController {
   findOne(@Param('id') id: string) {
     return this.bookingsService.findOne(+id);
   }
+
+  @Get('/shop/:id')
+  findByShop(@Param('id') id: string) {
+    return this.bookingsService.findByShop(+id);
+  }
+
+  @Get('/organization/:id')
+  findByOrganization(@Param('id') id: string) {
+    return this.bookingsService.findByShop(+id);
+  }
+
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateBookingDto: UpdateBookingDto) {

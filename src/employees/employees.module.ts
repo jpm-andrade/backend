@@ -5,11 +5,21 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Employee } from './entities/employee.entity';
 import { Language } from 'src/languages/entities/language.entity';
 import { User } from 'src/users/entities/user.entity';
+import { EmployeeLanguage } from 'src/employee-languages/entities/employee-language.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Employee, Language, User,])],
+  imports: [
+    TypeOrmModule.forFeature(
+      [
+        Employee,
+        Language,
+        User,
+        EmployeeLanguage
+      ]
+    )
+  ],
   controllers: [EmployeesController],
   providers: [EmployeesService],
   exports: [EmployeesService]
 })
-export class EmployeesModule {}
+export class EmployeesModule { }

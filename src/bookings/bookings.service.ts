@@ -7,6 +7,9 @@ import { Booking } from './entities/booking.entity';
 import { ShopsService } from 'src/shops/shops.service';
 import { CustomersService } from 'src/customers/customers.service';
 import { BookingTypeService } from 'src/booking-type/booking-type.service';
+import { Shop } from 'src/shops/entities/shop.entity';
+import { Customer } from 'src/customers/entities/customer.entity';
+import { BookingType } from 'src/booking-type/entities/booking-type.entity';
 
 @Injectable()
 export class BookingsService {
@@ -14,30 +17,31 @@ export class BookingsService {
   constructor(
     @InjectRepository(Booking)
     private readonly bookingRepository: Repository<Booking>,
-    private readonly shopService: ShopsService,
-    private readonly customerService: CustomersService,
-    private readonly bookingTypeService: BookingTypeService
-
-
+    @InjectRepository(Shop)
+    private readonly shopRepository: Repository<Shop>,
+    @InjectRepository(Customer)
+    private readonly customerRepository: Repository<Customer>,
+    @InjectRepository(BookingType)
+    private readonly bookingTypeRepository: Repository<BookingType>,
   ) { }
 
 
   async create(createBookingDto: CreateBookingDto) {
     const booking = new Booking()
 
-    const shop = await this.shopService.findOne(createBookingDto.shopId)
+    const shop = await this.shopRepository.findOneBy({id:createBookingDto.shopId})
 
     if (!shop) {
       throw Error()
     }
 
-    const customer = await this.customerService.findOne(createBookingDto.customerId)
+    const customer = await this.customerRepository.findOneBy({id:createBookingDto.customerId})
 
     if (!customer) {
       throw Error()
     }
 
-    const bookingType = await this.bookingTypeService.findOne(createBookingDto.bookingTypeId)
+    const bookingType = await this.bookingTypeRepository.findOneBy({id:createBookingDto.bookingTypeId})
 
     if (!bookingType) {
       throw Error()
@@ -53,17 +57,37 @@ export class BookingsService {
     booking.customer = customer
     booking.bookingType = bookingType
 
-    
+
     return this.bookingRepository.save(booking);
   }
 
   findAll() {
-    return `This action returns all bookings`;
+    return this.bookingRepository.find();
   }
 
   findOne(id: number) {
-    return this.bookingRepository.findOneBy({id:id});
+    return this.bookingRepository.findOneBy({ id: id });
   }
+  /**
+   * 
+   * @param id 
+   * @returns 
+   */
+  findByShop(id: number) {
+    return this.bookingRepository.find(
+        {
+          relations:{
+            shop:true,
+          },
+          where:{
+            shop:{
+              id:id
+            }
+          }
+        }
+    )
+  }
+
 
   update(id: number, updateBookingDto: UpdateBookingDto) {
     return `This action updates a #${id} booking`;

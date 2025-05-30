@@ -5,6 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ActivityType } from './entities/activity-type.entity';
 import { ShopsService } from 'src/shops/shops.service';
+import { Shop } from 'src/shops/entities/shop.entity';
 
 @Injectable()
 export class ActivityTypeService {
@@ -12,13 +13,14 @@ export class ActivityTypeService {
   constructor(
     @InjectRepository(ActivityType)
     private readonly activityTypeRepository: Repository<ActivityType>,
-    private readonly shopService: ShopsService
+    @InjectRepository(Shop)
+    private readonly shopRepository: Repository<Shop>,
 
   ) { }
 
 
   async create(createActivityTypeDto: CreateActivityTypeDto) {
-    const shop = await this.shopService.findOne(createActivityTypeDto.shopId)
+    const shop = await this.shopRepository.findOneBy({id:createActivityTypeDto.shopId})
 
     if (!shop) {
       throw Error()

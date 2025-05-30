@@ -5,6 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Shop } from './entities/shop.entity';
 import { OrganizationsService } from 'src/organizations/organizations.service';
+import { Organization } from 'src/organizations/entities/organization.entity';
 
 @Injectable()
 export class ShopsService {
@@ -12,11 +13,12 @@ export class ShopsService {
   constructor(
     @InjectRepository(Shop)
     private readonly shopRepository: Repository<Shop>,
-    private readonly organizationService: OrganizationsService
+    @InjectRepository(Organization)
+    private readonly organizationRepository: Repository<Organization>,
   ) {}
 
   async create(createShopDto: CreateShopDto): Promise<Shop> {
-    const organization = await this.organizationService.findOne(createShopDto.organizationId)
+    const organization = await this.organizationRepository.findOneBy({id:createShopDto.organizationId})
 
     if(!organization){
       throw Error() 

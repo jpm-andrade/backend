@@ -13,7 +13,7 @@ export class Booking {
   @Column()
   checkInDate: Date;
 
-  @Column({nullable: true})
+  @Column({ nullable: true })
   certificationLevel?: string;
 
   @Column()
@@ -28,7 +28,11 @@ export class Booking {
   @Column({ default: false })
   isCanceled: boolean
 
-  @OneToMany(() => Activity, (activities) => activities.booking)
+  @OneToMany(() => Activity, (activities) => activities.booking,
+    {
+      eager:true
+    }
+  )
   activities: Activity[];
 
   @OneToOne(() => Shop, {
@@ -38,13 +42,15 @@ export class Booking {
   shop: Shop;
 
   @OneToOne(() => Customer, {
-    nullable: false
+    nullable: false,
+    eager: true
   })
   @JoinColumn()
   customer: Customer;
 
   @OneToOne(() => BookingType, {
-    nullable: false
+    nullable: false,
+    eager: true
   })
   @JoinColumn()
   bookingType: BookingType;

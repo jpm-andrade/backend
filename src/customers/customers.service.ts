@@ -4,7 +4,6 @@ import { UpdateCustomerDto } from './dto/update-customer.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Customer } from './entities/customer.entity';
-import { OrganizationsService } from 'src/organizations/organizations.service';
 
 @Injectable()
 export class CustomersService {
@@ -23,6 +22,7 @@ export class CustomersService {
     customer.dateOfBirth = createCustomerDto.dateOfBirth
     customer.gender = createCustomerDto.gender
     customer.country = createCustomerDto.country
+    customer.referedFrom = createCustomerDto.referedFrom
     
     return this.customerRepository.save(customer);
   }

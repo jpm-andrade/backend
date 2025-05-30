@@ -16,10 +16,7 @@ import { BookingsModule } from 'src/bookings/bookings.module';
     Employee,
     ActivityType,
     Booking
-  ]),
-  EmployeesModule,
-  ActivityTypeModule,
-  BookingsModule
+  ])
 ],
   controllers: [ActivitiesController],
   providers: [ActivitiesService],

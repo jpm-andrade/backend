@@ -1,3 +1,4 @@
+import { EmployeeLanguage } from 'src/employee-languages/entities/employee-language.entity';
 import { Language } from 'src/languages/entities/language.entity';
 import { Shop } from 'src/shops/entities/shop.entity';
 import { User } from 'src/users/entities/user.entity';
@@ -23,19 +24,21 @@ export class Employee {
   @Column()
   country: string;
 
-  @OneToMany(() => Language, (language) => language.employee)
-  languange: Language[]
+  @OneToMany(() => EmployeeLanguage, (employeeLanguage) => employeeLanguage.employee,
+    { cascade: true, eager: true }
+  )
+  employeeLanguages!: EmployeeLanguage[];
 
-  @ManyToOne(() => Shop, (shop)=> shop.employees)
+  @ManyToOne(() => Shop, (shop) => shop.employees)
   shop: Shop;
 
-  @OneToOne(type => User)
+  @OneToOne(() => User)
   createdBy: User
 
   @CreateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)" })
   createdAt: Date;
 
-  @OneToOne(type => User)
+  @OneToOne(() => User)
   updatedBy: User
 
   @UpdateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)" })

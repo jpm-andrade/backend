@@ -17,7 +17,7 @@ import { OrganizationsModule } from 'src/organizations/organizations.module';
         Organization
       ]
     ),
-  OrganizationsModule],
+  ],
   controllers: [ShopsController],
   providers: [ShopsService],
   exports:[ShopsService]
