@@ -44,8 +44,9 @@ export class UsersService {
         updateUserDto.password,
         roundsOfHashing,
       );
+      user.name = updateUserDto.name
 
-      return this.userRepository.update({ email: updateUserDto.email }, user)
+      return this.userRepository.save(user)
 
     }
   }
@@ -60,7 +61,8 @@ export class UsersService {
         cause: "User not found"
       })
     } else {
-      return this.userRepository.update({ token: token }, user)
+      user.token = token
+      return this.userRepository.save(user)
     }
 
   }

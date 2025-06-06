@@ -1,4 +1,5 @@
 import { ActivityType } from 'src/activity-type/entities/activity-type.entity';
+import { AuthorizedShop } from 'src/authorized-shops/entities/authorized-shop.entity';
 import { BookingType } from 'src/booking-type/entities/booking-type.entity';
 import { Employee } from 'src/employees/entities/employee.entity';
 import { Organization } from 'src/organizations/entities/organization.entity';
@@ -30,6 +31,9 @@ export class Shop {
 
   @OneToMany(() => ActivityType, (bookingTypes) => bookingTypes.shop)
   bookingTypes: BookingType[]
+
+  @OneToMany(() => AuthorizedShop, (authShop)=> authShop.user)
+  authShop: AuthorizedShop[]
 
   @OneToOne(() => User)
   @JoinColumn()

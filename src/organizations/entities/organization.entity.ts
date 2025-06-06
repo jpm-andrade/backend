@@ -1,3 +1,4 @@
+import { AuthorizedShop } from 'src/authorized-shops/entities/authorized-shop.entity';
 import { Customer } from 'src/customers/entities/customer.entity';
 import { Shop } from 'src/shops/entities/shop.entity';
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
@@ -18,5 +19,8 @@ export class Organization {
 
   @OneToMany(() => Shop, (shops) => shops.organization, {nullable: true})
   shops: Shop[];
+
+  @OneToMany(() => AuthorizedShop, (authShop)=> authShop.user)
+  authShop: AuthorizedShop[]
 
 }

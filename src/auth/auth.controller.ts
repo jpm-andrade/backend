@@ -37,7 +37,8 @@ export class AuthController {
       username: signUpDto.username, 
       email: signUpDto.email, 
       password: signUpDto.password,
-      createdAt: new Date()
+      createdAt: new Date(),
+      name: signUpDto.name
     }
     return this.authService.signUp(payload);
   }

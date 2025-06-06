@@ -25,4 +25,10 @@ export class SignUpDto {
   @MinLength(6)
   @ApiProperty()
   confirmPassword: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @MinLength(6)
+  @ApiProperty()
+  name: string;
 }

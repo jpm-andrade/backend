@@ -12,15 +12,15 @@ export class AuthorizedShop {
   @Column({ default: true })
   isActive: boolean;
 
-  @ManyToOne(() => Shop, {eager:true})
+  @ManyToOne(() => Shop, { eager: true })
   shops: Shop;
 
-  @ManyToOne(() => Organization, {nullable: true, eager:true})
+  @ManyToOne(() => Organization, { nullable: true, eager: true })
   organization: Organization;
 
-  @ManyToOne(() => User, (user)=> user.authShop)
+  @ManyToOne(() => User, (user) => user.authShop)
   user: User
 
-  
+
 
 }

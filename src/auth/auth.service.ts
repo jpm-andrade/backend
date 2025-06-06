@@ -5,7 +5,7 @@ import { CreateUserDto } from "src/users/dto/create-user.dto";
 import * as bcrypt from 'bcrypt';
 @Injectable()
 export class AuthService {
-    
+
     constructor(
         private usersService: UsersService,
         private jwtService: JwtService
@@ -26,9 +26,18 @@ export class AuthService {
             throw new UnauthorizedException();
         }
         const payload = { sub: user.id, email: user.email };
+        const token = await this.jwtService.signAsync(payload)
+        const shops = user.authShop.map((authShop) => {
+            return {
+                name: authShop.shops.name,
+                id: authShop.shops.id
+            }
+        })
+        await this.usersService.updateToken(email, token)
         return {
             access_token: await this.jwtService.signAsync(payload),
-            user:user
+            user: user,
+            shops: shops
         };
     }
 
@@ -47,5 +56,5 @@ export class AuthService {
 
     async me(token: string) {
         return ("Method not implemented.");
-      }
+    }
 }
