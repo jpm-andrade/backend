@@ -50,6 +50,21 @@ export class UsersService {
     }
   }
 
+  async updateToken(email: string, token: string) {
+    let user = await this.findByEmail(email)
+    if (user == null) {
+      new HttpException({
+        status: HttpStatus.FORBIDDEN,
+        error: 'This user does not exist',
+      }, HttpStatus.FORBIDDEN, {
+        cause: "User not found"
+      })
+    } else {
+      return this.userRepository.update({ token: token }, user)
+    }
+
+  }
+
   findAll(): Promise<User[]> {
     return this.userRepository.find();
   }

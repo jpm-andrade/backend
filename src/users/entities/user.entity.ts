@@ -21,4 +21,7 @@ export class User {
 
   @ManyToOne(() => AuthorizedShop, (authShop)=> authShop.user)
   authShop: AuthorizedShop[]
+
+  @Column({nullable:true})
+  token: string
 }

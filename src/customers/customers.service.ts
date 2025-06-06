@@ -4,6 +4,7 @@ import { UpdateCustomerDto } from './dto/update-customer.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Customer } from './entities/customer.entity';
+import { DisplayCustomer } from './dto/display-customer.dto';
 
 @Injectable()
 export class CustomersService {
@@ -27,8 +28,21 @@ export class CustomersService {
     return this.customerRepository.save(customer);
   }
 
-  findAll() {
-    return this.customerRepository.find();
+  async findAll(): Promise<DisplayCustomer[]> {
+    const customers = this.customerRepository.find();
+
+    return (await customers).map<DisplayCustomer>((customer)=>{
+      return {
+        birthDate: customer.dateOfBirth.toDateString(),
+        country: customer.country,
+        id: customer.id,
+        name: customer.firstName + " " + customer.lastName,
+        status: "booked",
+        checkInDate: customer.createdAt.toDateString()
+      }
+    })
+    
+     
   }
 
   findOne(id: number) {

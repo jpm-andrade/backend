@@ -1,4 +1,4 @@
-import { Body, Controller, Post, HttpCode, HttpStatus } from "@nestjs/common";
+import { Body, Controller, Post, HttpCode, HttpStatus, Get } from "@nestjs/common";
 import { AuthService } from "./auth.service";
 import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { LoginDto } from "./dto/login.dto";
@@ -40,5 +40,18 @@ export class AuthController {
       createdAt: new Date()
     }
     return this.authService.signUp(payload);
+  }
+
+  @Public()
+  @HttpCode(HttpStatus.OK)
+  @Get("me")
+  @ApiOperation({ summary: "User By Token" })
+  @ApiResponse({
+    status: 200,
+    description: "The record found",
+    type: [BaseUser],
+  })
+  me(@Body() token: string) {
+    return this.authService.me(token);
   }
 }
