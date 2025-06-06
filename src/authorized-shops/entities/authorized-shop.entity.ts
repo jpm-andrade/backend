@@ -9,19 +9,13 @@ export class AuthorizedShop {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  name: string;
-
-  @Column()
-  location: string;
-
   @Column({ default: true })
   isActive: boolean;
 
-  @OneToOne(() => Shop)
+  @ManyToOne(() => Shop, {eager:true})
   shops: Shop;
 
-  @OneToOne(() => Organization, {nullable: true})
+  @ManyToOne(() => Organization, {nullable: true, eager:true})
   organization: Organization;
 
   @ManyToOne(() => User, (user)=> user.authShop)

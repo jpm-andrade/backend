@@ -1,6 +1,6 @@
 
 import { AuthorizedShop } from 'src/authorized-shops/entities/authorized-shop.entity';
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToMany } from 'typeorm';
 
 @Entity()
 export class User {
@@ -19,7 +19,9 @@ export class User {
   @Column({ default: true })
   isActive: boolean;
 
-  @ManyToOne(() => AuthorizedShop, (authShop)=> authShop.user)
+  @OneToMany(() => AuthorizedShop, (authShop)=> authShop.user, {
+    eager: true
+  })
   authShop: AuthorizedShop[]
 
   @Column({nullable:true})
