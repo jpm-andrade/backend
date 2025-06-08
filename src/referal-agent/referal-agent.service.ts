@@ -18,7 +18,7 @@ export class ReferalAgentService {
   }
 
   findAll() {
-    return `This action returns all referalAgent`;
+    return [];
   }
 
   findOne(id: number) {

@@ -9,6 +9,9 @@ export class ActivityType {
   @Column()
   category: string;
 
+  @Column({nullable:true})
+  bookingType:string
+
   @Column()
   label: string;
 

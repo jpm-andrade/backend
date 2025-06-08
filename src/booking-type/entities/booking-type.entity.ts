@@ -15,4 +15,7 @@ export class BookingType {
   @ManyToOne(() => Shop, (shop) => shop.bookingTypes)
   @JoinColumn()
   shop: Shop
+
+  @Column()
+  bookingPrice: number
 }

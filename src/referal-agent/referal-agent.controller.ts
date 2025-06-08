@@ -2,7 +2,9 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { ReferalAgentService } from './referal-agent.service';
 import { CreateReferalAgentDto } from './dto/create-referal-agent.dto';
 import { UpdateReferalAgentDto } from './dto/update-referal-agent.dto';
+import { Public } from 'src/auth/strategy/public-strategy';
 
+@Public()
 @Controller('referal-agent')
 export class ReferalAgentController {
   constructor(private readonly referalAgentService: ReferalAgentService) {}

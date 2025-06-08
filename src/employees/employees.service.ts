@@ -68,8 +68,8 @@ export class EmployeesService {
     return this.employeeRepository.findOneBy({ id: id });
   }
 
-  findByShop(id: number) {
-    return this.employeeRepository.find({
+  async findByShop(id: number) {
+    const employess = await this.employeeRepository.find({
       relations:{
         shop:true
       },
@@ -79,6 +79,13 @@ export class EmployeesService {
         }
       }
     });
+
+    return employess.map((employee) => {
+      return {
+          name: employee.firstName + " " +employee.lastName,
+          id: employee.id
+      }
+  })
   }
 
   findByOrganization(id: number) {

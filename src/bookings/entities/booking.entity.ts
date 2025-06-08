@@ -55,7 +55,8 @@ export class Booking {
   @JoinColumn()
   bookingType: BookingType;
 
-
+  @Column({nullable:true})
+  serviceCost: number
   @OneToOne(() => User)
   createdBy: User
 

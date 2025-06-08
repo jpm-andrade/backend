@@ -17,6 +17,7 @@ import { LanguagesModule } from './languages/languages.module';
 import { AuthModule } from './auth/auth.module';
 import { AuthorizedShopsModule } from './authorized-shops/authorized-shops.module';
 import { EmployeeLanguagesModule } from './employee-languages/employee-languages.module';
+import { CertificationsModule } from './certifications/certifications.module';
 
 @Module({
   imports: [
@@ -46,7 +47,8 @@ import { EmployeeLanguagesModule } from './employee-languages/employee-languages
     LanguagesModule,
     AuthModule,
     AuthorizedShopsModule,
-    EmployeeLanguagesModule
+    EmployeeLanguagesModule,
+    CertificationsModule
   ],
   controllers: [AppController],
   providers: [AppService],
