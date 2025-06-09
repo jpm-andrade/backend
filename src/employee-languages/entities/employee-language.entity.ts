@@ -10,6 +10,6 @@ export class EmployeeLanguage {
     @ManyToOne(() => Employee, (employee) => employee.employeeLanguages)
     employee!: Employee;
 
-    @ManyToOne(() => Language)
+    @ManyToOne(() => Language, {eager:true})
     language!: Language;
 }

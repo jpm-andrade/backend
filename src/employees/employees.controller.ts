@@ -24,6 +24,11 @@ export class EmployeesController {
     return this.employeesService.findByShop(+id);
   }
 
+  @Get('/list/:shopId')
+  findForList(@Param('shopId') id: string) {
+    return this.employeesService.findByShop(+id);
+  }
+
   @Get('/organization/:id')
   findByOrganization(@Param('id') id: string) {
     return this.employeesService.findAll();

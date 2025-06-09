@@ -24,6 +24,12 @@ export class Employee {
   @Column()
   country: string;
 
+  @Column()
+  position: string;
+
+  @Column()
+  status: string;
+
   @OneToMany(() => EmployeeLanguage, (employeeLanguage) => employeeLanguage.employee,
     { cascade: true, eager: true }
   )

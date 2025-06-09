@@ -25,6 +25,9 @@ export class Customer {
   @Column()
   referedFrom: string;
 
+  @Column({nullable:true})
+  phoneNumber:string
+
   @OneToOne(() => User)
   createdBy: User
 

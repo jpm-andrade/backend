@@ -28,9 +28,9 @@ export class EmployeesService {
   async create(createEmployeeDto: CreateEmployeeDto) {
     const employee = new Employee()
 
-    const shop = await this.shopRepository.findOneBy({id: createEmployeeDto.shopId})
+    const shop = await this.shopRepository.findOneBy({ id: createEmployeeDto.shopId })
 
-    if(!shop){
+    if (!shop) {
       throw new NotFoundException(`Shop ${createEmployeeDto.shopId} not found`);
 
     }
@@ -57,7 +57,7 @@ export class EmployeesService {
     })
 
 
-    return this.employeeRepository.findOneBy({id:savedEmployee.id});
+    return this.employeeRepository.findOneBy({ id: savedEmployee.id });
   }
 
   findAll() {
@@ -70,32 +70,60 @@ export class EmployeesService {
 
   async findByShop(id: number) {
     const employess = await this.employeeRepository.find({
-      relations:{
-        shop:true
+      relations: {
+        shop: true,
+        employeeLanguages:true,
       },
-      where:{
-        shop:{
-          id:id
+      where: {
+        shop: {
+          id: id
+        }
+      }
+    });
+
+    return employess.map((employee) => {
+      let lang
+      if (employee.employeeLanguages)
+        lang = employee.employeeLanguages.map((empLang) => { return empLang.language.languageCode })
+
+      return {
+        id: employee.id,
+        name: employee.firstName + " " + employee.lastName,
+        status: employee.status,
+        role: employee.position,
+        languages: lang?.join()
+      }
+    })
+  }
+
+  async findByShopForList(id: number) {
+    const employess = await this.employeeRepository.find({
+      relations: {
+        shop: true
+      },
+      where: {
+        shop: {
+          id: id
         }
       }
     });
 
     return employess.map((employee) => {
       return {
-          name: employee.firstName + " " +employee.lastName,
-          id: employee.id
+        label: employee.firstName + " " + employee.lastName,
+        id: employee.id
       }
-  })
+    })
   }
 
   findByOrganization(id: number) {
     return this.employeeRepository.find({
-      relations:{
-        shop:true
+      relations: {
+        shop: true
       },
-      where:{
-        shop:{
-          id:id
+      where: {
+        shop: {
+          id: id
         }
       }
     });

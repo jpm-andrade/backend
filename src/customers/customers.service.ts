@@ -24,6 +24,7 @@ export class CustomersService {
     customer.gender = createCustomerDto.gender
     customer.country = createCustomerDto.country
     customer.referedFrom = createCustomerDto.referedFrom
+    customer.phoneNumber = createCustomerDto.phoneNumber
     
     return this.customerRepository.save(customer);
   }

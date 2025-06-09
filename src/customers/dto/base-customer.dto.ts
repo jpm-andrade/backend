@@ -21,5 +21,8 @@ export class BaseCustomer {
     gender: string;
 
     @ApiProperty()
+    phoneNumber:string
+
+    @ApiProperty()
     referedFrom: string;
 }
