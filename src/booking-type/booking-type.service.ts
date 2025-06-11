@@ -29,6 +29,7 @@ export class BookingTypeService {
     bookingType.category = createBookingTypeDto.category
     bookingType.label = createBookingTypeDto.label
     bookingType.shop = shop
+    bookingType.bookingPrice = createBookingTypeDto.price
 
     return this.bookingTypeRepository.save(bookingType);
   }
@@ -44,11 +45,11 @@ export class BookingTypeService {
   }
 
   findOne(id: number) {
-    return this.bookingTypeRepository.findOneBy({id:id});;
+    return this.bookingTypeRepository.findOneBy({ id: id });;
   }
 
   async findBasedOnShop(id: number) {
-    return await this.bookingTypeRepository.find(
+    const bookingType = await this.bookingTypeRepository.find(
       {
         relations: {
           shop: true
@@ -60,6 +61,17 @@ export class BookingTypeService {
         }
       }
     );;
+
+    const response = bookingType.map((bk) => {
+      return {
+        id: bk.id,
+        category: bk.category,
+        label: bk.label,
+        price: bk.bookingPrice
+      }
+    })
+
+    return response
   }
 
   async update(id: number, updateBookingTypeDto: UpdateBookingTypeDto) {
@@ -70,6 +82,7 @@ export class BookingTypeService {
     } else {
       bookingType.category = updateBookingTypeDto.category
       bookingType.label = updateBookingTypeDto.label
+      bookingType.bookingPrice = updateBookingTypeDto.price
       return this.bookingTypeRepository.save(bookingType);
     }
 

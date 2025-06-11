@@ -26,7 +26,7 @@ export class EmployeesController {
 
   @Get('/list/:shopId')
   findForList(@Param('shopId') id: string) {
-    return this.employeesService.findByShop(+id);
+    return this.employeesService.findByShopForList(+id);
   }
 
   @Get('/organization/:id')

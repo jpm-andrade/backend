@@ -57,6 +57,7 @@ export class Booking {
 
   @Column({nullable:true})
   serviceCost: number
+  
   @OneToOne(() => User)
   createdBy: User
 

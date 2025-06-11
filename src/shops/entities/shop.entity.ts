@@ -1,6 +1,7 @@
 import { ActivityType } from 'src/activity-type/entities/activity-type.entity';
 import { AuthorizedShop } from 'src/authorized-shops/entities/authorized-shop.entity';
 import { BookingType } from 'src/booking-type/entities/booking-type.entity';
+import { Certification } from 'src/certifications/entities/certification.entity';
 import { Employee } from 'src/employees/entities/employee.entity';
 import { Organization } from 'src/organizations/entities/organization.entity';
 import { User } from 'src/users/entities/user.entity';
@@ -23,7 +24,7 @@ export class Shop {
   @OneToMany(() => Employee, (employees) => employees.shop)
   employees: Employee[];
 
-  @ManyToOne(() => Organization, (organization)=> organization.shops)
+  @ManyToOne(() => Organization, (organization)=> organization.shops, {eager:true})
   organization: Organization
 
   @OneToMany(() => ActivityType, (activityType) => activityType.shop)
@@ -31,6 +32,9 @@ export class Shop {
 
   @OneToMany(() => ActivityType, (bookingTypes) => bookingTypes.shop)
   bookingTypes: BookingType[]
+
+  @OneToMany(() => Certification, (certification) => certification.shop)
+  certification: Certification[]
 
   @OneToMany(() => AuthorizedShop, (authShop)=> authShop.user)
   authShop: AuthorizedShop[]

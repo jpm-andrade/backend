@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Put, Param, Delete } from '@nestjs/common';
 import { BookingTypeService } from './booking-type.service';
 import { CreateBookingTypeDto } from './dto/create-booking-type.dto';
 import { UpdateBookingTypeDto } from './dto/update-booking-type.dto';
@@ -22,7 +22,7 @@ export class BookingTypeController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.bookingTypeService.findBasedOnShop(+id);
+    return this.bookingTypeService.findOne(+id);
   }
 
   @Get('/shop/:id')
@@ -30,7 +30,7 @@ export class BookingTypeController {
     return this.bookingTypeService.findBasedOnShop(+id);
   }
 
-  @Patch(':id')
+  @Put(':id')
   update(@Param('id') id: string, @Body() updateBookingTypeDto: UpdateBookingTypeDto) {
     return this.bookingTypeService.update(+id, updateBookingTypeDto);
   }

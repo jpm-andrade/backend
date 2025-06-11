@@ -12,4 +12,7 @@ export class BaseBookingType {
 
     @ApiProperty()
     shopId: number;
+
+    @ApiProperty()
+    price: number;
 }

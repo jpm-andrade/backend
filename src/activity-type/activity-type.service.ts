@@ -31,6 +31,7 @@ export class ActivityTypeService {
 
     activityType.category = createActivityTypeDto.category
     activityType.label = createActivityTypeDto.label
+    activityType.bookingType = createActivityTypeDto.bookingType
     activityType.shop = shop
 
 
@@ -69,6 +70,8 @@ export class ActivityTypeService {
     } else {
       activityType.category = updateActivityTypeDto.category
       activityType.label = updateActivityTypeDto.label
+      activityType.bookingType = updateActivityTypeDto.bookingType
+
       return this.activityTypeRepository.save(activityType);
     }
   }

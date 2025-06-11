@@ -58,6 +58,21 @@ export class ShopsService {
     return this.shopRepository.findOneBy({id:id})
   }  
 
+  async findShopForDisplay(id: number) {
+    const shop = await this.shopRepository.findOneBy({ id: id })
+    
+    if(!shop)
+      return {}
+    
+    return {
+      id: shop.id,
+      name: shop.name,
+      location: shop.location,
+      organizationName: shop.organization.name,
+      country: shop.country
+    }
+  }
+
   update(id: number, updateShopDto: UpdateShopDto) {
     return `This action updates a #${id} shop`;
   }

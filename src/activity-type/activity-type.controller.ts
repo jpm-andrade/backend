@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Put } from '@nestjs/common';
 import { ActivityTypeService } from './activity-type.service';
 import { CreateActivityTypeDto } from './dto/create-activity-type.dto';
 import { UpdateActivityTypeDto } from './dto/update-activity-type.dto';
@@ -30,7 +30,7 @@ export class ActivityTypeController {
     return this.activityTypeService.findBasedOnShop(+id);
   }
 
-  @Patch(':id')
+  @Put(':id')
   update(@Param('id') id: string, @Body() updateActivityTypeDto: UpdateActivityTypeDto) {
     return this.activityTypeService.update(+id, updateActivityTypeDto);
   }

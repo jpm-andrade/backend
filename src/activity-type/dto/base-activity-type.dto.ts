@@ -14,4 +14,7 @@ export class BaseActivityType {
     @ApiProperty()
     shopId: number
 
+    @ApiProperty()
+    bookingType: string;
+
 }

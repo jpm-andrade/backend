@@ -21,7 +21,7 @@ export class ShopsController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.shopsService.findOne(+id);
+    return this.shopsService.findShopForDisplay(+id);
   }
 
   @Get('/organization/:id')
