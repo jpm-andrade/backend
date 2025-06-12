@@ -90,7 +90,7 @@ export class EmployeesService {
         id: employee.id,
         name: employee.firstName + " " + employee.lastName,
         status: employee.status,
-        role: employee.position,
+        role: employee.role,
         languages: lang?.join()
       }
     })

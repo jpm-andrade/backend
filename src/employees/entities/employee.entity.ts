@@ -1,5 +1,4 @@
 import { EmployeeLanguage } from 'src/employee-languages/entities/employee-language.entity';
-import { Language } from 'src/languages/entities/language.entity';
 import { Shop } from 'src/shops/entities/shop.entity';
 import { User } from 'src/users/entities/user.entity';
 import { Entity, Column, PrimaryGeneratedColumn, OneToOne, CreateDateColumn, UpdateDateColumn, ManyToOne, OneToMany } from 'typeorm';
@@ -25,7 +24,7 @@ export class Employee {
   country: string;
 
   @Column()
-  position: string;
+  role: string;
 
   @Column()
   status: string;

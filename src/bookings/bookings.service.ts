@@ -51,8 +51,6 @@ export class BookingsService {
     booking.checkInDate = createBookingDto.checkInDate;
     booking.certificationLevel = createBookingDto.certificationLevel
     booking.language = createBookingDto.language;
-    booking.country = createBookingDto.country;
-    booking.referedFrom = createBookingDto.referedFrom;
     booking.shop = shop
     booking.customer = customer
     booking.bookingType = bookingType

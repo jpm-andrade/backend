@@ -19,21 +19,9 @@ export class Activity {
 
   @ManyToOne(() => Booking, (booking) => booking.activities)
   booking: Booking;
-  
-  @Column()
-  date: Date;
 
   @Column()
   price: number;
-
-  @Column()
-  discount: number;
-
-  @Column()
-  deposit: number;
-
-  @Column()
-  referedFrom: string;
 
   @OneToOne(() => User)
   @JoinColumn()

@@ -4,9 +4,6 @@ import { UpdateActivityDto } from './dto/update-activity.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Activity } from './entities/activity.entity';
-import { EmployeesService } from 'src/employees/employees.service';
-import { ActivityTypeService } from 'src/activity-type/activity-type.service';
-import { BookingsService } from 'src/bookings/bookings.service';
 import { CreateActivityInternal } from './dto/create-activity-internal.dto';
 import { Employee } from 'src/employees/entities/employee.entity';
 import { ActivityType } from 'src/activity-type/entities/activity-type.entity';
@@ -56,11 +53,8 @@ export class ActivitiesService {
     activity.employee = employee
     activity.activityType = activityType
     activity.booking = booking
-    activity.date = createActivityDto.date
     activity.price = createActivityDto.price
-    activity.discount = createActivityDto.discount
-    activity.deposit = createActivityDto.discount
-    activity.referedFrom = createActivityDto.referedFrom
+    
 
     return this.activityRepository.save(activity)
   }
@@ -88,11 +82,7 @@ export class ActivitiesService {
     activity.employee = employee
     activity.activityType = activityType
     activity.booking = createActivityDto.booking
-    activity.date = createActivityDto.date
     activity.price = createActivityDto.price
-    activity.discount = createActivityDto.discount
-    activity.deposit = createActivityDto.discount
-    activity.referedFrom = createActivityDto.referedFrom
 
     return this.activityRepository.save(activity)
   }

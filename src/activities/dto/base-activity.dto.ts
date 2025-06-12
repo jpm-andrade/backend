@@ -1,31 +1,24 @@
 import { ApiProperty } from "@nestjs/swagger";
 
 export class BaseActivity {
-    @ApiProperty()
+    @ApiProperty({
+        description: 'Auto-generated unique identifier of the booking',
+        example: 123,
+    })
     id?: number;
- 
+
     @ApiProperty()
     employeeId: number;
-  
+
     @ApiProperty()
-    activityTypeId:number;
-  
+    activityTypeId: number;
+
     @ApiProperty()
     bookingId: number;
-    
+
     @ApiProperty()
     date: Date;
-  
+
     @ApiProperty()
     price: number;
-  
-    @ApiProperty()
-    discount: number;
-  
-    @ApiProperty()
-    deposit: number;
-  
-    @ApiProperty()
-    referedFrom: string;
-
 }

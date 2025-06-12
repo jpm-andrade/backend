@@ -19,18 +19,13 @@ export class Booking {
   @Column()
   language: string
 
-  @Column()
-  country: string;
-
-  @Column()
-  referedFrom: string;
-
   @Column({ default: false })
   isCanceled: boolean
 
   @OneToMany(() => Activity, (activities) => activities.booking,
     {
-      eager:true
+      eager:true,
+      nullable:true
     }
   )
   activities: Activity[];
@@ -58,6 +53,16 @@ export class Booking {
   @Column({nullable:true})
   serviceCost: number
   
+  @Column({
+    nullable:true
+  })
+  discount: number;
+
+  @Column({
+    nullable:true
+  })
+  deposit: number;
+
   @OneToOne(() => User)
   createdBy: User
 
