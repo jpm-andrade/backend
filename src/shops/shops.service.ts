@@ -69,12 +69,21 @@ export class ShopsService {
       name: shop.name,
       location: shop.location,
       organizationName: shop.organization.name,
+      organizationId: shop.organization.id,
       country: shop.country
     }
   }
 
-  update(id: number, updateShopDto: UpdateShopDto) {
-    return `This action updates a #${id} shop`;
+  async update(id: number, updateShopDto: UpdateShopDto) {
+    let shop = await this.shopRepository.findOneBy({id:id})
+
+    if(shop){
+      shop.country = updateShopDto.country
+      shop.location = updateShopDto.location
+      shop.name = updateShopDto.name
+    }else{
+
+    }
   }
 
   remove(id: number) {

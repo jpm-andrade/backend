@@ -23,7 +23,7 @@ import { Public } from "src/auth/strategy/public-strategy";
 @ApiTags("authorized-shops")
 @Controller("authorized-shops")
 export class AuthorizedShopsController {
-  constructor(private readonly authShopService: AuthorizedShopsService) {}
+  constructor(private readonly authShopService: AuthorizedShopsService) { }
 
   @Post()
   @UsePipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }))
@@ -51,13 +51,27 @@ export class AuthorizedShopsController {
     return this.authShopService.findAll();
   }
 
+  @Get("/shops/:id")
+  @ApiOperation({ summary: "Retrieve all Authorized User by Shop Id" })
+  @ApiParam({ name: "id", type: Number, description: "AuthorizedShop ID" })
+  @ApiResponse({
+    status: 200,
+    description: "Array of AuthorizedShops",
+    type: [AuthorizedShop],
+  })
+  async findAllUserPerShop(
+    @Param("id", ParseIntPipe) id: number
+  ): Promise<AuthorizedShop[]> {
+    return this.authShopService.findAllUserPerShop(id);
+  }
+
   @Get(":id")
   @ApiOperation({ summary: "Get a single AuthorizedShop by ID" })
   @ApiParam({ name: "id", type: Number, description: "AuthorizedShop ID" })
   @ApiResponse({
     status: 200,
     description: "The requested AuthorizedShop object",
-    type: AuthorizedShop,
+    type: [AuthorizedShop],
   })
   @ApiResponse({ status: 404, description: "Not Found" })
   async findOne(
@@ -84,13 +98,17 @@ export class AuthorizedShopsController {
     return this.authShopService.update(id, updateDto);
   }
 
-  @Delete(":id")
+  @Delete("/shop/:shopId/user/:id")
   @ApiOperation({ summary: "Delete an AuthorizedShop" })
-  @ApiParam({ name: "id", type: Number, description: "AuthorizedShop ID" })
+  @ApiParam({ name: "shopId", type: Number, description: "Shop ID" })
+  @ApiParam({ name: "id", type: Number, description: "User ID" })
   @ApiResponse({ status: 200, description: "Deleted successfully" })
   @ApiResponse({ status: 404, description: "Not Found" })
-  async remove(@Param("id", ParseIntPipe) id: number): Promise<{ message: string }> {
-    await this.authShopService.remove(id);
-    return { message: `AuthorizedShop with ID ${id} deleted` };
+  async remove(
+    @Param("id", ParseIntPipe) id: number,
+    @Param("shopId", ParseIntPipe) shopId: number
+  ): Promise<void> {
+    return await this.authShopService.remove(id, shopId);
+    
   }
 }

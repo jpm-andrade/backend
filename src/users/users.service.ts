@@ -28,8 +28,7 @@ export class UsersService {
     return this.userRepository.save(user);
   }
 
-
-  async update(updateUserDto: UpdateUserDto) {
+  async passwordUpdate(updateUserDto: UpdateUserDto) {
     let user = await this.findByEmail(updateUserDto.email)
 
     if (user == null) {
@@ -44,6 +43,23 @@ export class UsersService {
         updateUserDto.password,
         roundsOfHashing,
       );
+
+      return this.userRepository.save(user)
+
+    }
+  }
+
+  async update(updateUserDto: UpdateUserDto) {
+    let user = await this.findByEmail(updateUserDto.email)
+
+    if (user == null) {
+      new HttpException({
+        status: HttpStatus.FORBIDDEN,
+        error: 'This user does not exist',
+      }, HttpStatus.FORBIDDEN, {
+        cause: "User not found"
+      })
+    } else {
       user.name = updateUserDto.name
 
       return this.userRepository.save(user)
@@ -81,6 +97,10 @@ export class UsersService {
 
   findByEmail(email: string): Promise<User | null> {
     return this.userRepository.findOneByOrFail({ email: email })
+  }
+
+  findByToken(token: string): Promise<User | null> {
+    return this.userRepository.findOneByOrFail({ token: token })
   }
 
   async remove(id: number): Promise<void> {

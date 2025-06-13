@@ -85,6 +85,20 @@ export class AuthorizedShopsService {
   }
 
   /**
+   * Find all AuthorizedShop records.
+   */
+  findAllUserPerShop(id: number): Promise<AuthorizedShop[]> {
+    return this.authorizedShopRepository.find({
+      relations: ["shops", "organization", "user"],
+      where:{
+        shops:{
+          id:id
+        }
+      }
+    });
+  }
+
+  /**
    * Find one AuthorizedShop by its ID.
    */
   async findOne(id: number): Promise<AuthorizedShop> {
@@ -108,8 +122,15 @@ export class AuthorizedShopsService {
   /**
    * Remove (delete) an AuthorizedShop by its ID.
    */
-  async remove(id: number): Promise<void> {
-    const result = await this.authorizedShopRepository.delete(id);
+  async remove(id: number, shopId:number): Promise<void> {
+    const result = await this.authorizedShopRepository.delete({
+      user:{
+        id: id
+      },
+      shops:{
+        id:shopId
+      }
+    });
     if (result.affected === 0) {
       throw new HttpException(
         {

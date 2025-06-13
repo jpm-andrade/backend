@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, Put } from '@nestjs/common';
 import { ShopsService } from './shops.service';
 import { CreateShopDto } from './dto/create-shop.dto';
 import { UpdateShopDto } from './dto/update-shop.dto';
@@ -29,7 +29,7 @@ export class ShopsController {
     return this.shopsService.findOrganization(+id);
   }
 
-  @Patch(':id')
+  @Put(':id')
   update(@Param('id') id: string, @Body() updateShopDto: UpdateShopDto) {
     return this.shopsService.update(+id, updateShopDto);
   }

@@ -31,7 +31,20 @@ export class OrganizationsService {
     return this.organizationRepository.findOneBy({id: id});
   }
 
-  update(id: number, updateOrganizationDto: UpdateOrganizationDto) {
+  async update(id: number, updateOrganizationDto: UpdateOrganizationDto) {
+    let organization = await  this.organizationRepository.findOneBy({id:id})
+
+    if(!organization){
+
+    }else {
+      organization.isActive = updateOrganizationDto.isActive
+      organization.name = updateOrganizationDto.name
+      organization.location = updateOrganizationDto.location
+
+      return this.organizationRepository.save(organization)
+    }
+    
+    
     return `This action updates a #${id} organization`;
   }
 

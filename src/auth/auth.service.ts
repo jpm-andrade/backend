@@ -55,6 +55,20 @@ export class AuthService {
     }
 
     async me(token: string) {
-        return ("Method not implemented.");
+        const user = await this.usersService.findByToken(token)
+        if (!user)
+            return {}
+
+        const shops = user.authShop.map((authShop) => {
+            return {
+                name: authShop.shops.name,
+                id: authShop.shops.id
+            }
+        })
+        return {
+            access_token: token,
+            user: user,
+            shops: shops
+        };;
     }
 }
