@@ -6,6 +6,7 @@ import { Booking } from './entities/booking.entity';
 import { Shop } from 'src/shops/entities/shop.entity';
 import { Customer } from 'src/customers/entities/customer.entity';
 import { BookingType } from 'src/booking-type/entities/booking-type.entity';
+import { ActivitiesModule } from 'src/activities/activities.module';
 
 @Module({
   imports: [TypeOrmModule.forFeature([
@@ -14,6 +15,7 @@ import { BookingType } from 'src/booking-type/entities/booking-type.entity';
     Customer,
     BookingType
   ]),
+  ActivitiesModule
 ],
   controllers: [BookingsController],
   providers: [BookingsService],

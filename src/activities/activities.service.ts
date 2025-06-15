@@ -98,7 +98,8 @@ export class ActivitiesService {
       })
       )
     } catch (error) {
-      throw new Error()
+      console.log(error)
+      throw new Error(error)
     }
   }
 

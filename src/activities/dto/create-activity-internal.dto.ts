@@ -19,14 +19,5 @@ export class CreateActivityInternal {
   
     @ApiProperty()
     price: number;
-  
-    @ApiProperty()
-    discount: number;
-  
-    @ApiProperty()
-    deposit: number;
-  
-    @ApiProperty()
-    referedFrom: string;
 
 }

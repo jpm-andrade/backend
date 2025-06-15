@@ -10,6 +10,8 @@ import { BookingTypeService } from 'src/booking-type/booking-type.service';
 import { Shop } from 'src/shops/entities/shop.entity';
 import { Customer } from 'src/customers/entities/customer.entity';
 import { BookingType } from 'src/booking-type/entities/booking-type.entity';
+import { ActivitiesService } from 'src/activities/activities.service';
+import { CreateActivityInternal } from 'src/activities/dto/create-activity-internal.dto';
 
 @Injectable()
 export class BookingsService {
@@ -23,6 +25,7 @@ export class BookingsService {
     private readonly customerRepository: Repository<Customer>,
     @InjectRepository(BookingType)
     private readonly bookingTypeRepository: Repository<BookingType>,
+    private readonly activitiesService: ActivitiesService
   ) { }
 
 
@@ -56,7 +59,22 @@ export class BookingsService {
     booking.bookingType = bookingType
 
 
-    return this.bookingRepository.save(booking);
+    const create = await this.bookingRepository.save(booking);
+
+    const actData = createBookingDto.activities?.map<CreateActivityInternal>((value)=>{
+        return {
+          booking:create,
+          activityTypeId: value.activityTypeId,
+          date: value.date,
+          employeeId: value.employeeId,
+          price: value.price
+        }
+    })
+    console.log(actData)
+    if(actData)
+      await this.activitiesService.bulkCreate(actData)
+
+    return this.findOne(create.id)
   }
 
   findAll() {
