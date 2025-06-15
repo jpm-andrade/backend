@@ -99,6 +99,20 @@ export class AuthorizedShopsService {
   }
 
   /**
+   * Find all AuthorizedShop records.
+   */
+  findAllShopsPerUser(id: number): Promise<AuthorizedShop[]> {
+    return this.authorizedShopRepository.find({
+      relations: ["shops", "organization", "user"],
+      where:{
+        user:{
+          id:id
+        }
+      }
+    });
+  }
+
+  /**
    * Find one AuthorizedShop by its ID.
    */
   async findOne(id: number): Promise<AuthorizedShop> {

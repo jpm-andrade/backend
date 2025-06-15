@@ -7,6 +7,7 @@ import { Language } from 'src/languages/entities/language.entity';
 import { User } from 'src/users/entities/user.entity';
 import { EmployeeLanguage } from 'src/employee-languages/entities/employee-language.entity';
 import { Shop } from 'src/shops/entities/shop.entity';
+import { EmployeeRole } from 'src/employee-roles/entities/employee-role.entity';
 
 @Module({
   imports: [
@@ -16,7 +17,8 @@ import { Shop } from 'src/shops/entities/shop.entity';
         Language,
         User,
         EmployeeLanguage,
-        Shop
+        Shop,
+        EmployeeRole
       ]
     )
   ],

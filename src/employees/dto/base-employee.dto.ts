@@ -23,6 +23,10 @@ export class BaseEmployee {
   @ApiProperty({ example: 'NL', description: 'ISO-3166-1 alpha-2 country code' })
   country: string;
 
+  @ApiProperty({ example: 'True', description: 'true | false' })
+  freelancer: boolean;
+
+
   /* ─────────────── Relations as IDs ─────────────── */
 
   @ApiProperty({
@@ -34,5 +38,8 @@ export class BaseEmployee {
 
   @ApiProperty({ example: 7, description: 'Shop ID the employee belongs to' })
   shopId: number;
+  
+  @ApiProperty({ example: 7, description: 'Role Id the employee has' })
+  roleId: number;
 
 }

@@ -18,6 +18,7 @@ import { AuthModule } from './auth/auth.module';
 import { AuthorizedShopsModule } from './authorized-shops/authorized-shops.module';
 import { EmployeeLanguagesModule } from './employee-languages/employee-languages.module';
 import { CertificationsModule } from './certifications/certifications.module';
+import { EmployeeRolesModule } from './employee-roles/employee-roles.module';
 
 @Module({
   imports: [
@@ -48,7 +49,8 @@ import { CertificationsModule } from './certifications/certifications.module';
     AuthModule,
     AuthorizedShopsModule,
     EmployeeLanguagesModule,
-    CertificationsModule
+    CertificationsModule,
+    EmployeeRolesModule
   ],
   controllers: [AppController],
   providers: [AppService],

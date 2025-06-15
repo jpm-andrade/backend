@@ -2,6 +2,7 @@ import { ActivityType } from 'src/activity-type/entities/activity-type.entity';
 import { AuthorizedShop } from 'src/authorized-shops/entities/authorized-shop.entity';
 import { BookingType } from 'src/booking-type/entities/booking-type.entity';
 import { Certification } from 'src/certifications/entities/certification.entity';
+import { EmployeeRole } from 'src/employee-roles/entities/employee-role.entity';
 import { Employee } from 'src/employees/entities/employee.entity';
 import { Organization } from 'src/organizations/entities/organization.entity';
 import { User } from 'src/users/entities/user.entity';
@@ -38,6 +39,9 @@ export class Shop {
 
   @OneToMany(() => AuthorizedShop, (authShop)=> authShop.user)
   authShop: AuthorizedShop[]
+
+  @OneToMany(() => EmployeeRole, (role) => role.shop)
+  role: EmployeeRole[];
 
   @OneToOne(() => User)
   @JoinColumn()

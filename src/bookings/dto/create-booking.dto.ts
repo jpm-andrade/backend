@@ -10,7 +10,7 @@ export class CreateBookingDto extends BaseBooking {
         type: () => CreateActivityDto,
         isArray: true,
     })
-    activities: CreateActivityDto[];
+    activities?: CreateActivityDto[];
 
     @ApiProperty({
         description: 'Identifier of the booking type',

@@ -1,4 +1,5 @@
 import { EmployeeLanguage } from 'src/employee-languages/entities/employee-language.entity';
+import { EmployeeRole } from 'src/employee-roles/entities/employee-role.entity';
 import { Shop } from 'src/shops/entities/shop.entity';
 import { User } from 'src/users/entities/user.entity';
 import { Entity, Column, PrimaryGeneratedColumn, OneToOne, CreateDateColumn, UpdateDateColumn, ManyToOne, OneToMany } from 'typeorm';
@@ -24,9 +25,12 @@ export class Employee {
   country: string;
 
   @Column()
-  role: string;
+  freelancer: boolean;
 
-  @Column()
+  @ManyToOne(() => EmployeeRole, (role) => role.employees, { eager: true })
+  role: EmployeeRole;
+
+  @Column({nullable:true})
   status: string;
 
   @OneToMany(() => EmployeeLanguage, (employeeLanguage) => employeeLanguage.employee,
@@ -35,7 +39,7 @@ export class Employee {
   employeeLanguages!: EmployeeLanguage[];
 
   @ManyToOne(() => Shop, (shop) => shop.employees, {
-    eager:true
+    eager: true
   })
   shop: Shop;
 

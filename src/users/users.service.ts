@@ -5,7 +5,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import * as bcrypt from 'bcrypt';
-import { HTTP_CODE_METADATA } from '@nestjs/common/constants';
 
 export const roundsOfHashing = 10;
 @Injectable()
@@ -24,6 +23,7 @@ export class UsersService {
     user.password = createUserDto.password
     user.username = createUserDto.username
     user.isActive = true
+    user.name = createUserDto.name
 
     return this.userRepository.save(user);
   }

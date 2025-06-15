@@ -65,6 +65,20 @@ export class AuthorizedShopsController {
     return this.authShopService.findAllUserPerShop(id);
   }
 
+  @Get("/users/:id")
+  @ApiOperation({ summary: "Retrieve all Authorized Shops by User Id" })
+  @ApiParam({ name: "id", type: Number, description: "User ID" })
+  @ApiResponse({
+    status: 200,
+    description: "Array of AuthorizedShops",
+    type: [AuthorizedShop],
+  })
+  async findAllShopsPerUser(
+    @Param("id", ParseIntPipe) id: number
+  ): Promise<AuthorizedShop[]> {
+    return this.authShopService.findAllUserPerShop(id);
+  }
+
   @Get(":id")
   @ApiOperation({ summary: "Get a single AuthorizedShop by ID" })
   @ApiParam({ name: "id", type: Number, description: "AuthorizedShop ID" })
