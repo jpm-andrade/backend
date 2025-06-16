@@ -24,6 +24,11 @@ export class ActivitiesController {
     return this.activitiesService.findOne(+id);
   }
 
+  @Get('/wages/:id')
+  findWages(@Param('id') id: string) {
+    return this.activitiesService.calculateMonthlyEmployeeWages(+id);
+  }
+
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateActivityDto: UpdateActivityDto) {
     return this.activitiesService.update(+id, updateActivityDto);

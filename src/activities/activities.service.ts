@@ -8,6 +8,7 @@ import { CreateActivityInternal } from './dto/create-activity-internal.dto';
 import { Employee } from 'src/employees/entities/employee.entity';
 import { ActivityType } from 'src/activity-type/entities/activity-type.entity';
 import { Booking } from 'src/bookings/entities/booking.entity';
+import { startOfMonth, endOfMonth, format } from 'date-fns';
 
 @Injectable()
 export class ActivitiesService {
@@ -32,19 +33,19 @@ export class ActivitiesService {
   async create(createActivityDto: CreateActivityDto) {
     const activity = new Activity()
 
-    const employee = await this.employeeRepository.findOneBy({id:createActivityDto.employeeId})
+    const employee = await this.employeeRepository.findOneBy({ id: createActivityDto.employeeId })
 
     if (!employee) {
       throw new NotFoundException(`Employee ${createActivityDto.employeeId} not found`);
     }
 
-    const activityType = await this.activityTypeRepository.findOneBy({id:createActivityDto.activityTypeId})
+    const activityType = await this.activityTypeRepository.findOneBy({ id: createActivityDto.activityTypeId })
 
     if (!activityType) {
       throw new NotFoundException(`Activity Type ${createActivityDto.activityTypeId} not found`);
     }
 
-    const booking = await this.bookingRepository.findOneBy({id:createActivityDto.bookingId})
+    const booking = await this.bookingRepository.findOneBy({ id: createActivityDto.bookingId })
 
     if (!booking) {
       throw new NotFoundException(`Booking ${createActivityDto.bookingId} not found`);
@@ -54,7 +55,7 @@ export class ActivitiesService {
     activity.activityType = activityType
     activity.booking = booking
     activity.price = createActivityDto.price
-    
+
 
     return this.activityRepository.save(activity)
   }
@@ -67,13 +68,13 @@ export class ActivitiesService {
   async createInternal(createActivityDto: CreateActivityInternal) {
     const activity = new Activity()
 
-    const employee = await this.employeeRepository.findOneBy({id:createActivityDto.employeeId})
+    const employee = await this.employeeRepository.findOneBy({ id: createActivityDto.employeeId })
 
     if (!employee) {
       throw new NotFoundException(`Employee ${createActivityDto.employeeId} not found`);
     }
 
-    const activityType = await this.activityTypeRepository.findOneBy({id:createActivityDto.activityTypeId})
+    const activityType = await this.activityTypeRepository.findOneBy({ id: createActivityDto.activityTypeId })
 
     if (!activityType) {
       throw new NotFoundException(`Activity Type ${createActivityDto.employeeId} not found`);
@@ -101,6 +102,79 @@ export class ActivitiesService {
       console.log(error)
       throw new Error(error)
     }
+  }
+
+  async bulkUpdate(createBulkActivityDto: CreateActivityInternal[]) {
+    try {
+      await Promise.all(
+        createBulkActivityDto.map(async (activity) => {
+          await this.activityRepository.save(activity)
+        })
+      )
+    } catch (error) {
+      console.log(error)
+      throw new Error(error)
+    }
+  }
+
+  async calculateMonthlyEmployeeWages(shopId: number) {
+    const activities = await this.activityRepository.find({
+      relations: {
+        employee: { role: true },
+        booking: true,
+      },
+      where: {
+        booking: {
+          shop: { id: shopId },
+          isCanceled: false,
+        },
+      },
+    });
+
+    const grouped: Record<string, Record<number, {
+      id: number;
+      name: string;
+      role: string;
+      total: number;
+    }>> = {};
+
+    for (const activity of activities) {
+      const { employee, booking } = activity;
+      if (!employee || !booking) continue;
+
+      const month = format(new Date(booking.checkInDate), 'yyyy-MM');
+
+      const employeeId = employee.id;
+      const employeeKey = `${employeeId}`;
+
+      if (!grouped[month]) grouped[month] = {};
+      if (!grouped[month][employeeId]) {
+        grouped[month][employeeId] = {
+          id: employee.id,
+          name: `${employee.firstName} ${employee.lastName}`,
+          role: employee.role?.name || 'N/A',
+          total: 0,
+        };
+      }
+
+      if (employee.freelancer) {
+        grouped[month][employeeId].total += employee.fixedRate ?? 0;
+      } else {
+        const discount = booking.discount ?? 0;
+        const serviceCost = booking.serviceCost ?? 0;
+
+        const discountedPrice =
+          activity.price - serviceCost - (activity.price * discount) / 100;
+
+        grouped[month][employeeId].total += Math.max(discountedPrice, 0);
+      }
+    }
+
+    // Format result
+    return Object.entries(grouped).map(([month, employeesMap]) => ({
+      month,
+      employees: Object.values(employeesMap),
+    }));
   }
 
 

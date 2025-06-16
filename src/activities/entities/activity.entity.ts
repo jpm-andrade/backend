@@ -23,6 +23,9 @@ export class Activity {
   @Column()
   price: number;
 
+  @Column({nullable:true})
+  commissionValue:number
+
   @OneToOne(() => User)
   @JoinColumn()
   createdBy: User

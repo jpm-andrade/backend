@@ -27,6 +27,9 @@ export class Employee {
   @Column()
   freelancer: boolean;
 
+  @Column({nullable:true})
+  fixedRate: number
+
   @ManyToOne(() => EmployeeRole, (role) => role.employees, { eager: true })
   role: EmployeeRole;
 

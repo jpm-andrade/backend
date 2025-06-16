@@ -9,11 +9,12 @@ import { DisplayCustomer } from './dto/display-customer.dto';
 @Injectable()
 export class CustomersService {
 
-  
+
+
   constructor(
     @InjectRepository(Customer)
     private readonly customerRepository: Repository<Customer>,
-  ) {}
+  ) { }
 
   async create(createCustomerDto: CreateCustomerDto) {
     const customer = new Customer()
@@ -25,14 +26,14 @@ export class CustomersService {
     customer.country = createCustomerDto.country
     customer.referedFrom = createCustomerDto.referedFrom
     customer.phoneNumber = createCustomerDto.phoneNumber
-    
+
     return this.customerRepository.save(customer);
   }
 
   async findAll(): Promise<DisplayCustomer[]> {
     const customers = this.customerRepository.find();
 
-    return (await customers).map<DisplayCustomer>((customer)=>{
+    return (await customers).map<DisplayCustomer>((customer) => {
       return {
         birthDate: customer.dateOfBirth.toDateString(),
         country: customer.country,
@@ -42,12 +43,12 @@ export class CustomersService {
         checkInDate: customer.createdAt.toDateString()
       }
     })
-    
-     
+
+
   }
 
   findOne(id: number) {
-    return this.customerRepository.findOneBy({id:id});
+    return this.customerRepository.findOneBy({ id: id });
   }
 
   update(id: number, updateCustomerDto: UpdateCustomerDto) {

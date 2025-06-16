@@ -23,7 +23,7 @@ export class CustomersController {
   findOne(@Param('id') id: string) {
     return this.customersService.findOne(+id);
   }
-
+  
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateCustomerDto: UpdateCustomerDto) {
     return this.customersService.update(+id, updateCustomerDto);

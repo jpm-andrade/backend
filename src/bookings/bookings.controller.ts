@@ -20,6 +20,16 @@ export class BookingsController {
     return this.bookingsService.findAll();
   }
 
+  @Get('/customer/shop/:id')
+  findForCustomerTable(@Param('id') id: string) {
+    return this.bookingsService.findForCustomersTable(+id);
+  }
+
+  @Get('/customer/:id')
+  findForCustomerTableDetails(@Param('id') id: string) {
+    return this.bookingsService.findForCustomerDetailTable(+id);
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.bookingsService.findOne(+id);
