@@ -16,7 +16,9 @@ export class Booking {
   @Column({ nullable: true })
   certificationLevel?: string;
 
-  @Column()
+  @Column({
+    default: "English"
+  })
   language: string
 
   @Column({ default: false })
@@ -45,7 +47,7 @@ export class Booking {
   customer: Customer;
 
   @ManyToOne(() => BookingType, {
-    nullable: false,
+    nullable: true,
     eager: true
   })
   @JoinColumn()
@@ -61,7 +63,7 @@ export class Booking {
 
   @Column({
     nullable:true
-  })
+  })  
   deposit: number;
 
   @OneToOne(() => User)

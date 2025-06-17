@@ -15,4 +15,10 @@ export class BaseBookingType {
 
     @ApiProperty()
     price: number;
+
+    @ApiProperty()
+    packageDeal:boolean
+  
+    @ApiProperty()
+    actvityLimit?:number
 }

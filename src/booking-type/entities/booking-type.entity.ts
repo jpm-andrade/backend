@@ -18,4 +18,10 @@ export class BookingType {
 
   @Column()
   bookingPrice: number
+
+  @Column({default:false})
+  packageDeal:boolean
+
+  @Column({nullable:true})
+  actvityLimit:number
 }

@@ -18,4 +18,7 @@ export class ActivityType {
   @ManyToOne(() => Shop, (shop) => shop.activityTypes)
   @JoinColumn()
   shop: Shop
+
+  @Column()
+  price:number
 }

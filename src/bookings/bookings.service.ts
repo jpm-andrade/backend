@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateBookingDto } from './dto/create-booking.dto';
 import { UpdateBookingDto } from './dto/update-booking.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -11,6 +11,7 @@ import { ActivitiesService } from 'src/activities/activities.service';
 import { CreateActivityInternal } from 'src/activities/dto/create-activity-internal.dto';
 import { CustomerDetailsBookingTable } from './dto/customers-table-booking.dto';
 import { DisplayCustomerBooking } from './dto/display-customer-booking.dto';
+import { BookingDTO } from './dto/fetch-booking.dto';
 
 @Injectable()
 export class BookingsService {
@@ -96,6 +97,49 @@ export class BookingsService {
       });
   }
 
+
+  /*
+  async getBookingDTO(id: number): Promise<BookingDTO> {
+    const booking = await this.bookingRepository.findOne({
+      where: { id },
+      relations: {
+        shop: true,
+        customer: true,
+        bookingType: true,
+        activities: {
+          employee: true,
+          activityType: true,
+        },
+      },
+    });
+  
+    if (!booking) {
+      throw new NotFoundException("Booking not found");
+    }
+  
+    return {
+      id: booking.id,
+      checkInDate: new Date(booking.checkInDate),
+      certificationLevel: booking.certificationLevel ?? undefined,
+      language: booking.language,
+      shopId: booking.shop.id,
+      customerId: booking.customer.id,
+      bookingTypeId: booking.bookingType.id,
+      price: booking.price,
+      deposit: booking.deposit,
+      discount: booking.discount,
+      activities: booking.activities.map((a) => ({
+        employeeId: a.employee.id,
+        activityTypeId: a.activityType.id,
+        date: new Date(a.date),
+        price: a.price,
+        activityLabel: a.activityType.label,
+        category: a.activityType.category,
+      })),
+    };
+  }
+  
+
   /*findForTable(id: number) {
     return this.bookingRepository.findOne(
       {
@@ -142,6 +186,7 @@ export class BookingsService {
       const activity = value.activities.find((value, index) => index ? value : {})
       return {
         id: value.id,
+        customerId: value.customer.id,
         date: value.checkInDate,
         category: value.bookingType.category,
         activity: value.bookingType.label,
@@ -163,7 +208,7 @@ export class BookingsService {
       .innerJoin("sub.shop", "subShop")
       .where("subShop.id = :shopId", { shopId })
       .groupBy("sub.customerId");
-  
+
     const latestBookings = await this.bookingRepository
       .createQueryBuilder("booking")
       .innerJoin(
@@ -179,7 +224,7 @@ export class BookingsService {
       .orderBy("booking.checkInDate", "DESC")
       .setParameters(subQuery.getParameters())
       .getMany();
-  
+
     return latestBookings.map((value) => ({
       customerId: value.customer.id,
       customerName: `${value.customer.firstName} ${value.customer.lastName}`,
@@ -187,10 +232,11 @@ export class BookingsService {
       activity: value.bookingType.label,
       lastBookingDate: value.checkInDate,
       lastBookingType: value.bookingType.label,
+      bookingId: value.id
     }));
   }
-  
-  
+
+
 
 
   /**
