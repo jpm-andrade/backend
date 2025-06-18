@@ -8,9 +8,9 @@ export class Activity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @OneToOne(() => Employee)
-  @JoinColumn()
+  @ManyToOne(() => Employee)
   employee: Employee;
+  
 
   @ManyToOne(() => Booking, (booking) => booking.activities)
   booking: Booking;

@@ -96,7 +96,7 @@ export class ActivitiesService {
     try {
       await Promise.all(
         createBulkActivityDto.map(async (activity) => {
-          await this.activityRepository.save(activity)
+          await this.createInternal(activity)
         })
       )
     } catch (error) {
