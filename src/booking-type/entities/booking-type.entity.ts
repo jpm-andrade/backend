@@ -19,12 +19,14 @@ export class BookingType {
   @Column()
   bookingPrice: number
 
-  @Column({default:false})
-  needsCert:boolean
+  @Column({ default: false })
+  needsCert: boolean
 
-  @Column({default:false})
-  packageDeal:boolean
+  @Column({ default: false })
+  packageDeal: boolean
 
-  @Column({nullable:true})
-  actvityLimit:number
+  @Column({
+    default: 1
+  })
+  actvityLimit: number
 }

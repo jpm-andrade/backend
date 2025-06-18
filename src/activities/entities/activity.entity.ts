@@ -9,11 +9,11 @@ export class Activity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @OneToOne(()=> Employee)
+  @OneToOne(() => Employee)
   @JoinColumn()
   employee: Employee;
 
-  @OneToOne(()=> ActivityType)
+  @OneToOne(() => ActivityType, { nullable: true })
   @JoinColumn()
   activityType: ActivityType;
 
@@ -23,8 +23,8 @@ export class Activity {
   @Column()
   price: number;
 
-  @Column({nullable:true})
-  commissionValue:number
+  @Column({ nullable: true })
+  commissionValue: number
 
   @OneToOne(() => User)
   @JoinColumn()
