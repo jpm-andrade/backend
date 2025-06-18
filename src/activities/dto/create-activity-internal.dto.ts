@@ -16,5 +16,4 @@ export class CreateActivityInternal {
   
     @ApiProperty()
     price: number;
-
 }

@@ -65,7 +65,8 @@ export class BookingsService {
         booking: create,
         date: value.date,
         employeeId: value.employeeId,
-        price: value.price
+        price: value.price,
+        
       }
     })
     console.log(actData)

@@ -67,6 +67,7 @@ export class ActivitiesService {
     activity.employee = employee
     activity.booking = createActivityDto.booking
     activity.price = createActivityDto.price
+    activity.commissionValue = employee.freelancer ? 25 : 30
 
     return this.activityRepository.save(activity)
   }
@@ -87,6 +88,10 @@ export class ActivitiesService {
     }
   }
 
+  /**
+   * 
+   * @param createBulkActivityDto 
+   */
   async bulkUpdate(createBulkActivityDto: CreateActivityInternal[]) {
     try {
       await Promise.all(
@@ -100,11 +105,16 @@ export class ActivitiesService {
     }
   }
 
+  /**
+   * 
+   * @param shopId 
+   * @returns 
+   */
   async calculateMonthlyEmployeeWages(shopId: number) {
     const activities = await this.activityRepository.find({
       relations: {
         employee: { role: true },
-        booking: true,
+        booking: { bookingType: true },
       },
       where: {
         booking: {
@@ -123,12 +133,10 @@ export class ActivitiesService {
 
     for (const activity of activities) {
       const { employee, booking } = activity;
-      if (!employee || !booking) continue;
+      if (!employee || !booking || !booking.bookingType) continue;
 
       const month = format(new Date(booking.checkInDate), 'yyyy-MM');
-
       const employeeId = employee.id;
-      const employeeKey = `${employeeId}`;
 
       if (!grouped[month]) grouped[month] = {};
       if (!grouped[month][employeeId]) {
@@ -140,20 +148,29 @@ export class ActivitiesService {
         };
       }
 
-      if (employee.freelancer) {
-        grouped[month][employeeId].total += employee.fixedRate ?? 0;
+      let wage = 0;
+
+      if (booking.bookingType.isCourse) {
+        if (employee.freelancer) {
+          // Case 1: Course + freelancer = 25% of bookingPrice
+          wage = (booking.bookingType.bookingPrice ?? 0) * 0.25;
+        } else {
+          // Case 3: Course + non-freelancer = commissionValue logic
+          wage = (activity.price ?? 0) * (activity.commissionValue ?? 0);
+        }
       } else {
-        const discount = booking.discount ?? 0;
-        const serviceCost = booking.serviceCost ?? 0;
-
-        const discountedPrice =
-          activity.price - serviceCost - (activity.price * discount) / 100;
-
-        grouped[month][employeeId].total += Math.max(discountedPrice, 0);
+        if (employee.freelancer) {
+          // Case 2: Not course + freelancer = fixedRate
+          wage = employee.fixedRate ?? 0;
+        } else {
+          // Case 4: Not course + non-freelancer = fixedRate
+          wage = employee.fixedRate ?? 0;
+        }
       }
+
+      grouped[month][employeeId].total += Math.max(wage, 0);
     }
 
-    // Format result
     return Object.entries(grouped).map(([month, employeesMap]) => ({
       month,
       employees: Object.values(employeesMap),
@@ -163,8 +180,9 @@ export class ActivitiesService {
 
   findAll() {
     return this.activityRepository.find({
-      relations:{
-        booking:true
+      relations: {
+        booking: true,
+        employee:true
       }
     });
   }
