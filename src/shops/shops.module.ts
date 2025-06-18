@@ -5,8 +5,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Shop } from './entities/shop.entity';
 import { Employee } from 'src/employees/entities/employee.entity';
 import { Organization } from 'src/organizations/entities/organization.entity';
-import { OrganizationsModule } from 'src/organizations/organizations.module';
-
 
 @Module({
   imports: [

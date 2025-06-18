@@ -11,9 +11,6 @@ export class BaseActivity {
     employeeId: number;
 
     @ApiProperty()
-    activityTypeId: number;
-
-    @ApiProperty()
     bookingId: number;
 
     @ApiProperty()

@@ -11,7 +11,6 @@ import { ActivitiesService } from 'src/activities/activities.service';
 import { CreateActivityInternal } from 'src/activities/dto/create-activity-internal.dto';
 import { CustomerDetailsBookingTable } from './dto/customers-table-booking.dto';
 import { DisplayCustomerBooking } from './dto/display-customer-booking.dto';
-import { BookingDTO } from './dto/fetch-booking.dto';
 
 @Injectable()
 export class BookingsService {
@@ -64,7 +63,6 @@ export class BookingsService {
     const actData = createBookingDto.activities?.map<CreateActivityInternal>((value) => {
       return {
         booking: create,
-        activityTypeId: value.activityTypeId,
         date: value.date,
         employeeId: value.employeeId,
         price: value.price
@@ -167,7 +165,6 @@ export class BookingsService {
           customer: true,
           activities: {
             employee: true,
-            activityType: true
           },
           bookingType: true
 
@@ -302,7 +299,6 @@ export class BookingsService {
       return {
         id: value.id,
         booking: create,
-        activityTypeId: value.activityTypeId,
         date: value.date,
         employeeId: value.employeeId,
         price: value.price

@@ -6,7 +6,6 @@ import { Repository } from 'typeorm';
 import { Activity } from './entities/activity.entity';
 import { CreateActivityInternal } from './dto/create-activity-internal.dto';
 import { Employee } from 'src/employees/entities/employee.entity';
-import { ActivityType } from 'src/activity-type/entities/activity-type.entity';
 import { Booking } from 'src/bookings/entities/booking.entity';
 import { startOfMonth, endOfMonth, format } from 'date-fns';
 
@@ -18,8 +17,6 @@ export class ActivitiesService {
     private readonly activityRepository: Repository<Activity>,
     @InjectRepository(Employee)
     private readonly employeeRepository: Repository<Employee>,
-    @InjectRepository(ActivityType)
-    private readonly activityTypeRepository: Repository<ActivityType>,
     @InjectRepository(Booking)
     private readonly bookingRepository: Repository<Booking>,
 
@@ -39,12 +36,6 @@ export class ActivitiesService {
       throw new NotFoundException(`Employee ${createActivityDto.employeeId} not found`);
     }
 
-    const activityType = await this.activityTypeRepository.findOneBy({ id: createActivityDto.activityTypeId })
-
-    if (!activityType) {
-      throw new NotFoundException(`Activity Type ${createActivityDto.activityTypeId} not found`);
-    }
-
     const booking = await this.bookingRepository.findOneBy({ id: createActivityDto.bookingId })
 
     if (!booking) {
@@ -52,7 +43,6 @@ export class ActivitiesService {
     }
 
     activity.employee = employee
-    activity.activityType = activityType
     activity.booking = booking
     activity.price = createActivityDto.price
 
@@ -74,14 +64,7 @@ export class ActivitiesService {
       throw new NotFoundException(`Employee ${createActivityDto.employeeId} not found`);
     }
 
-    const activityType = await this.activityTypeRepository.findOneBy({ id: createActivityDto.activityTypeId })
-
-    if (!activityType) {
-      throw new NotFoundException(`Activity Type ${createActivityDto.employeeId} not found`);
-    }
-
     activity.employee = employee
-    activity.activityType = activityType
     activity.booking = createActivityDto.booking
     activity.price = createActivityDto.price
 

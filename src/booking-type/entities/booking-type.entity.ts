@@ -25,6 +25,9 @@ export class BookingType {
   @Column({ default: false })
   packageDeal: boolean
 
+  @Column({ default: false })
+  isCourse: boolean
+
   @Column({
     default: 1
   })

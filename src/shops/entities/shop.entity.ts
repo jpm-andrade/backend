@@ -1,4 +1,3 @@
-import { ActivityType } from 'src/activity-type/entities/activity-type.entity';
 import { AuthorizedShop } from 'src/authorized-shops/entities/authorized-shop.entity';
 import { BookingType } from 'src/booking-type/entities/booking-type.entity';
 import { Certification } from 'src/certifications/entities/certification.entity';
@@ -28,10 +27,7 @@ export class Shop {
   @ManyToOne(() => Organization, (organization)=> organization.shops, {eager:true})
   organization: Organization
 
-  @OneToMany(() => ActivityType, (activityType) => activityType.shop)
-  activityTypes: ActivityType[]
-
-  @OneToMany(() => ActivityType, (bookingTypes) => bookingTypes.shop)
+  @OneToMany(() => BookingType, (bookingTypes) => bookingTypes.shop)
   bookingTypes: BookingType[]
 
   @OneToMany(() => Certification, (certification) => certification.shop)

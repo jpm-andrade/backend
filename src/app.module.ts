@@ -10,7 +10,6 @@ import { ActivitiesModule } from './activities/activities.module';
 import { ShopsModule } from './shops/shops.module';
 import { BookingsModule } from './bookings/bookings.module';
 import { BookingTypeModule } from './booking-type/booking-type.module';
-import { ActivityTypeModule } from './activity-type/activity-type.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { join } from 'path';
 import { LanguagesModule } from './languages/languages.module';
@@ -32,7 +31,7 @@ import { EmployeeRolesModule } from './employee-roles/employee-roles.module';
       entities: [join(__dirname, '**', '*.entity.{ts,js}')],
       synchronize: true,
       autoLoadEntities:true,
-      //dropSchema:true,
+      dropSchema:true,
       //debug: true
     }),
     UsersModule,
@@ -44,7 +43,6 @@ import { EmployeeRolesModule } from './employee-roles/employee-roles.module';
     ShopsModule,
     BookingsModule,
     BookingTypeModule,
-    ActivityTypeModule,
     LanguagesModule,
     AuthModule,
     AuthorizedShopsModule,

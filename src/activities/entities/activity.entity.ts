@@ -1,4 +1,3 @@
-import { ActivityType } from 'src/activity-type/entities/activity-type.entity';
 import { Booking } from 'src/bookings/entities/booking.entity';
 import { Employee } from 'src/employees/entities/employee.entity';
 import { User } from 'src/users/entities/user.entity';
@@ -12,10 +11,6 @@ export class Activity {
   @OneToOne(() => Employee)
   @JoinColumn()
   employee: Employee;
-
-  @OneToOne(() => ActivityType, { nullable: true })
-  @JoinColumn()
-  activityType: ActivityType;
 
   @ManyToOne(() => Booking, (booking) => booking.activities)
   booking: Booking;

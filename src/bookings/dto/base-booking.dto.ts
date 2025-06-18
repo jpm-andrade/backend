@@ -60,6 +60,6 @@ export class BaseBooking {
         example: 10.0,
         default: 0,
     })
-    deposit: number;
+    deposit: number;    
 
 }
