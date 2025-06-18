@@ -76,7 +76,11 @@ export class BookingsService {
   }
 
   findAll() {
-    return this.bookingRepository.find();
+    return this.bookingRepository.find({
+      relations:{
+        activities:true
+      }
+    });
   }
 
   findOne(id: number) {
@@ -94,68 +98,6 @@ export class BookingsService {
         }
       });
   }
-
-
-  /*
-  async getBookingDTO(id: number): Promise<BookingDTO> {
-    const booking = await this.bookingRepository.findOne({
-      where: { id },
-      relations: {
-        shop: true,
-        customer: true,
-        bookingType: true,
-        activities: {
-          employee: true,
-          activityType: true,
-        },
-      },
-    });
-  
-    if (!booking) {
-      throw new NotFoundException("Booking not found");
-    }
-  
-    return {
-      id: booking.id,
-      checkInDate: new Date(booking.checkInDate),
-      certificationLevel: booking.certificationLevel ?? undefined,
-      language: booking.language,
-      shopId: booking.shop.id,
-      customerId: booking.customer.id,
-      bookingTypeId: booking.bookingType.id,
-      price: booking.price,
-      deposit: booking.deposit,
-      discount: booking.discount,
-      activities: booking.activities.map((a) => ({
-        employeeId: a.employee.id,
-        activityTypeId: a.activityType.id,
-        date: new Date(a.date),
-        price: a.price,
-        activityLabel: a.activityType.label,
-        category: a.activityType.category,
-      })),
-    };
-  }
-  
-
-  /*findForTable(id: number) {
-    return this.bookingRepository.findOne(
-      {
-        relations: {
-          customer: true,
-          activities: {
-            employee: true,
-            activityType: true
-          },
-          bookingType: true
-
-        },
-        where: {
-          id: id
-        }
-      });
-  }*/
-
 
 
   async findForCustomerDetailTable(id?: number) {
@@ -190,7 +132,7 @@ export class BookingsService {
         price: value.activities.reduce((accumulator, currentValue) => {
           return accumulator + currentValue.price;
         }, 0),
-        employeeName: activity?.employee.firstName + " " + activity?.employee.lastName
+        name: activity?.employee.firstName + " " + activity?.employee.lastName
 
 
       }
@@ -224,10 +166,10 @@ export class BookingsService {
 
     return latestBookings.map((value) => ({
       customerId: value.customer.id,
-      customerName: `${value.customer.firstName} ${value.customer.lastName}`,
+      name: `${value.customer.firstName} ${value.customer.lastName}`,
       status: value.activities.length === 0 ? "Check in" : "Booked",
       activity: value.bookingType.label,
-      lastBookingDate: value.checkInDate,
+      date: value.checkInDate,
       lastBookingType: value.bookingType.label,
       bookingId: value.id
     }));

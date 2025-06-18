@@ -30,6 +30,12 @@ export class BookingTypeService {
     bookingType.label = createBookingTypeDto.label
     bookingType.shop = shop
     bookingType.bookingPrice = createBookingTypeDto.price
+    if (createBookingTypeDto.actvityLimit)
+      bookingType.actvityLimit = createBookingTypeDto.actvityLimit
+    bookingType.packageDeal = createBookingTypeDto.packageDeal
+    bookingType.isCourse = createBookingTypeDto.isCourse
+    bookingType.needsCert = createBookingTypeDto.needsCert
+
 
     return this.bookingTypeRepository.save(bookingType);
   }
@@ -68,7 +74,10 @@ export class BookingTypeService {
         category: bk.category,
         label: bk.label,
         price: bk.bookingPrice,
-        packageDeal:bk.packageDeal
+        packageDeal: bk.packageDeal,
+        isCourse:bk.isCourse,
+        actvityLimit: bk.actvityLimit,
+        needsCert: bk.needsCert
       }
     })
 
@@ -87,6 +96,9 @@ export class BookingTypeService {
       if (updateBookingTypeDto.actvityLimit)
         bookingType.actvityLimit = updateBookingTypeDto.actvityLimit
       bookingType.packageDeal = updateBookingTypeDto.packageDeal
+      bookingType.isCourse = updateBookingTypeDto.isCourse
+      bookingType.needsCert = updateBookingTypeDto.needsCert
+
 
       return this.bookingTypeRepository.save(bookingType);
     }

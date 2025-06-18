@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Put } from '@nestjs/common';
 import { BookingsService } from './bookings.service';
 import { CreateBookingDto } from './dto/create-booking.dto';
 import { UpdateBookingDto } from './dto/update-booking.dto';
@@ -46,7 +46,7 @@ export class BookingsController {
   }
 
 
-  @Patch(':id')
+  @Put(':id')
   update(@Param('id') id: string, @Body() updateBookingDto: UpdateBookingDto) {
     return this.bookingsService.update(+id, updateBookingDto);
   }

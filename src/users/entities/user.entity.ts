@@ -29,4 +29,7 @@ export class User {
 
   @Column({nullable:true})
   token: string
+
+  @Column({ default: false })
+  isAdmin: string
 }

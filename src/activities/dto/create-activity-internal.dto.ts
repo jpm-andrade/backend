@@ -9,9 +9,6 @@ export class CreateActivityInternal {
     employeeId: number;
   
     @ApiProperty()
-    activityTypeId?:number;
-  
-    @ApiProperty()
     booking: Booking;
     
     @ApiProperty()

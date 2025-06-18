@@ -31,7 +31,7 @@ import { EmployeeRolesModule } from './employee-roles/employee-roles.module';
       entities: [join(__dirname, '**', '*.entity.{ts,js}')],
       synchronize: true,
       autoLoadEntities:true,
-      dropSchema:true,
+      //dropSchema:true,
       //debug: true
     }),
     UsersModule,

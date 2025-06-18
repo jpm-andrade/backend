@@ -162,7 +162,11 @@ export class ActivitiesService {
 
 
   findAll() {
-    return this.activityRepository.find();
+    return this.activityRepository.find({
+      relations:{
+        booking:true
+      }
+    });
   }
 
   findOne(id: number) {

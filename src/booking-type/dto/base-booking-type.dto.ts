@@ -18,7 +18,13 @@ export class BaseBookingType {
 
     @ApiProperty()
     packageDeal:boolean
-  
+
+    @ApiProperty()
+    isCourse:boolean
+
+    @ApiProperty()
+    needsCert: boolean
+
     @ApiProperty()
     actvityLimit?:number
 }

@@ -3,8 +3,8 @@ import { ApiProperty } from "@nestjs/swagger";
 
 export class DisplayCustomerBooking {
     customerId:number
-    customerName: string
+    name: string
     status: string;
-    lastBookingDate: Date;
+    date: Date;
     lastBookingType: string
 }

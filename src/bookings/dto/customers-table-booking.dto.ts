@@ -5,7 +5,7 @@ export class CustomerDetailsBookingTable {
     id:number;
     customerId:number;
     date: Date;
-    employeeName: string;
+    name: string;
     category:string;
     activity: string;
     price: number
