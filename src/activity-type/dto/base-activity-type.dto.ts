@@ -17,4 +17,6 @@ export class BaseActivityType {
     @ApiProperty()
     bookingType: string;
 
+    @ApiProperty()
+    price?: number;
 }

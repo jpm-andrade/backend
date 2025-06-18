@@ -20,7 +20,7 @@ export class ActivityTypeService {
 
 
   async create(createActivityTypeDto: CreateActivityTypeDto) {
-    const shop = await this.shopRepository.findOneBy({id:createActivityTypeDto.shopId})
+    const shop = await this.shopRepository.findOneBy({ id: createActivityTypeDto.shopId })
 
     if (!shop) {
       throw Error()
@@ -33,6 +33,9 @@ export class ActivityTypeService {
     activityType.label = createActivityTypeDto.label
     activityType.bookingType = createActivityTypeDto.bookingType
     activityType.shop = shop
+    if (createActivityTypeDto.price)
+      activityType.price = createActivityTypeDto.price
+
 
 
     return this.activityTypeRepository.save(activityType)
@@ -43,7 +46,7 @@ export class ActivityTypeService {
   }
 
   findOne(id: number) {
-    return this.activityTypeRepository.findOneBy({id:id});
+    return this.activityTypeRepository.findOneBy({ id: id });
   }
 
   findBasedOnShop(id: number) {
@@ -51,7 +54,7 @@ export class ActivityTypeService {
     return this.activityTypeRepository.find(
       {
         relations: {
-          shop:true
+          shop: true
         },
         where: {
           shop: {
@@ -71,6 +74,8 @@ export class ActivityTypeService {
       activityType.category = updateActivityTypeDto.category
       activityType.label = updateActivityTypeDto.label
       activityType.bookingType = updateActivityTypeDto.bookingType
+      if (updateActivityTypeDto.price)
+        activityType.price = updateActivityTypeDto.price
 
       return this.activityTypeRepository.save(activityType);
     }

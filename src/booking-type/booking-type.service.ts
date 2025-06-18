@@ -67,7 +67,8 @@ export class BookingTypeService {
         id: bk.id,
         category: bk.category,
         label: bk.label,
-        price: bk.bookingPrice
+        price: bk.bookingPrice,
+        packageDeal:bk.packageDeal
       }
     })
 
@@ -83,6 +84,10 @@ export class BookingTypeService {
       bookingType.category = updateBookingTypeDto.category
       bookingType.label = updateBookingTypeDto.label
       bookingType.bookingPrice = updateBookingTypeDto.price
+      if (updateBookingTypeDto.actvityLimit)
+        bookingType.actvityLimit = updateBookingTypeDto.actvityLimit
+      bookingType.packageDeal = updateBookingTypeDto.packageDeal
+
       return this.bookingTypeRepository.save(bookingType);
     }
 

@@ -19,6 +19,6 @@ export class ActivityType {
   @JoinColumn()
   shop: Shop
 
-  @Column()
+  @Column({nullable:true})
   price:number
 }

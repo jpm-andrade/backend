@@ -20,6 +20,9 @@ export class BookingType {
   bookingPrice: number
 
   @Column({default:false})
+  needsCert:boolean
+
+  @Column({default:false})
   packageDeal:boolean
 
   @Column({nullable:true})
