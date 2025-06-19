@@ -26,6 +26,9 @@ export class BaseEmployee {
   @ApiProperty({ example: 'True', description: 'true | false' })
   freelancer: boolean;
 
+  @ApiProperty({ example: '75', description: 'Rate for of the employee' })
+  fixedRate: number;
+
 
   /* ─────────────── Relations as IDs ─────────────── */
 

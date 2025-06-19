@@ -14,7 +14,6 @@ export class AuthService {
     saltOrRounds: number = 10;
 
     async signIn(email: string, pass: string) {
-        console.log("Got into the sign in")
         const user = await this.usersService.findByEmail(email);
         if (!user) {
             throw new UnauthorizedException();

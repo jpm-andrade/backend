@@ -43,20 +43,20 @@ export class BookingsService {
       throw Error()
     }
 
-    const bookingType = await this.bookingTypeRepository.findOneBy({ id: createBookingDto.bookingTypeId })
+    if (createBookingDto.bookingTypeId) {
+      const bookingType = await this.bookingTypeRepository.findOneBy({ id: createBookingDto.bookingTypeId })
 
-    if (!bookingType) {
-      throw Error()
+      if (!bookingType) {
+        throw Error()
+      }
+      booking.bookingType = bookingType
     }
-
 
     booking.checkInDate = createBookingDto.checkInDate;
     booking.certificationLevel = createBookingDto.certificationLevel
     booking.language = createBookingDto.language;
     booking.shop = shop
     booking.customer = customer
-    booking.bookingType = bookingType
-
 
     const create = await this.bookingRepository.save(booking);
 
@@ -66,7 +66,7 @@ export class BookingsService {
         date: value.date,
         employeeId: value.employeeId,
         price: value.price,
-        
+
       }
     })
     console.log(actData)
@@ -78,8 +78,8 @@ export class BookingsService {
 
   findAll() {
     return this.bookingRepository.find({
-      relations:{
-        activities:true
+      relations: {
+        activities: true
       }
     });
   }
@@ -169,9 +169,9 @@ export class BookingsService {
       customerId: value.customer.id,
       name: `${value.customer.firstName} ${value.customer.lastName}`,
       status: value.activities.length === 0 ? "Check in" : "Booked",
-      activity: value.bookingType.label,
+      activity: value.bookingType ? value.bookingType.label : "",
       date: value.checkInDate,
-      lastBookingType: value.bookingType.label,
+      lastBookingType: value.bookingType ? value.bookingType.label : "",
       bookingId: value.id
     }));
   }

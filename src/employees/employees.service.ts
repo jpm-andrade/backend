@@ -47,6 +47,8 @@ export class EmployeesService {
     employee.shop = shop
     employee.role = role
     employee.freelancer = createEmployeeDto.freelancer
+    employee.fixedRate = createEmployeeDto.fixedRate
+
 
     const savedEmployee = await this.employeeRepository.save(employee)
 
@@ -178,6 +180,7 @@ export class EmployeesService {
     employee.gender = updateEmployeeDto.gender ?? employee.gender;
     employee.country = updateEmployeeDto.country ?? employee.country;
     employee.freelancer = updateEmployeeDto.freelancer
+    employee.fixedRate = updateEmployeeDto.fixedRate
 
 
     // Optional role update

@@ -16,5 +16,5 @@ export class CreateBookingDto extends BaseBooking {
         description: 'Identifier of the booking type',
         example: 7,
     })
-    bookingTypeId: number;
+    bookingTypeId?: number;
 }
