@@ -6,7 +6,7 @@ import { Public } from 'src/auth/strategy/public-strategy';
 import { Certification } from './entities/certification.entity'
 import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiBody } from '@nestjs/swagger'
 
-@Public()
+
 @ApiTags('certifications')
 @Controller('certifications')
 export class CertificationsController {

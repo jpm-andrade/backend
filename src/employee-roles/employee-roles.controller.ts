@@ -19,7 +19,6 @@ import {
 import { EmployeeRole } from './entities/employee-role.entity';
 import { Public } from 'src/auth/strategy/public-strategy';
 
-@Public()
 @ApiTags('Employee Roles')
 @Controller('employee-roles')
 export class EmployeeRolesController {

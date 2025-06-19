@@ -4,7 +4,6 @@ import { CreateShopDto } from './dto/create-shop.dto';
 import { UpdateShopDto } from './dto/update-shop.dto';
 import { Public } from 'src/auth/strategy/public-strategy';
 
-@Public()
 @Controller('shops')
 export class ShopsController {
   constructor(private readonly shopsService: ShopsService) { }

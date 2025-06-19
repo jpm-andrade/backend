@@ -5,11 +5,13 @@ import { UpdateBookingDto } from './dto/update-booking.dto';
 import { Public } from 'src/auth/strategy/public-strategy';
 
 
-@Public()
+
 @Controller('bookings')
 export class BookingsController {
   constructor(private readonly bookingsService: BookingsService) {}
 
+
+  @Public()
   @Post()
   create(@Body() createBookingDto: CreateBookingDto) {
     return this.bookingsService.create(createBookingDto);
@@ -30,6 +32,11 @@ export class BookingsController {
     return this.bookingsService.findForCustomerDetailTable(+id);
   }
 
+  @Get('activities-page/shop/:id')
+  async getActivitiesPageData(@Param('id') id: string) {
+    return this.bookingsService.getBookingsWithActivities(+id);
+  }
+  
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.bookingsService.findOne(+id);

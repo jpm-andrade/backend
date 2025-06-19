@@ -177,6 +177,53 @@ export class BookingsService {
   }
 
 
+  async getBookingsWithActivities(id:number): Promise<any[]> {
+    const bookings = await this.bookingRepository.find({
+      relations: [
+        'bookingType',            // BookingType { id, label, … } :contentReference[oaicite:0]{index=0}
+        'activities',             // Activity[] :contentReference[oaicite:1]{index=1}
+        'activities.employee',    // Employee on each Activity :contentReference[oaicite:2]{index=2}
+      ],
+      where:{
+        shop:{
+          id:id
+        }
+      }
+    });
+
+    return bookings.map((b) => {
+      // Dedupe employees across activities
+      const uniqueEmps = Array.from(
+        new Map(
+          b.activities.map((a) => [a.employee.id, a.employee])
+        ).values()
+      );
+
+      return {
+        id: b.id,
+        // concat firstName + lastName
+        employees: uniqueEmps.map((e) => ({
+          id: e.id,
+          name: `${e.firstName} ${e.lastName}`,
+        })),
+        bookingType: {
+          id: b.bookingType.id,
+          label: b.bookingType.label,
+        },
+        date: b.checkInDate.toISOString(),
+        serviceCost: b.serviceCost ?? 0,
+        activities: b.activities.map((a) => ({
+          id: a.id,
+          employee: {
+            id: a.employee.id,
+            name: `${a.employee.firstName} ${a.employee.lastName}`,
+          },
+          commission: a.commissionValue ?? 0,
+          price: a.price,
+        })),
+      };
+    });
+  }
 
 
   /**
