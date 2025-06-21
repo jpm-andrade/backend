@@ -66,6 +66,11 @@ export class Booking {
   })  
   deposit: number;
 
+  @Column({
+    nullable:true
+  })  
+  value: number;
+
   @OneToOne(() => User)
   createdBy: User
 
