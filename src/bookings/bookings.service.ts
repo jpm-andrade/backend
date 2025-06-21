@@ -13,7 +13,6 @@ import { CustomerDetailsBookingTable } from './dto/customers-table-booking.dto';
 import { DisplayCustomerBooking } from './dto/display-customer-booking.dto';
 import { BulkCreateBookingDto } from './dto/create-bulk-booking.dto';
 import { BareActivitiesDTO, BareBookingDTO } from './dto/ui-bare-booking.dto';
-import { noop } from 'rxjs';
 
 @Injectable()
 export class BookingsService {
@@ -92,10 +91,12 @@ export class BookingsService {
    * @param createBookingDto 
    */
   createBulk(createBookingDto: BulkCreateBookingDto) {
+    console.log(createBookingDto)
     try {
       Promise.all(createBookingDto.customerIdList.map(async (customer) => {
         createBookingDto.customerId = customer
-        this.create(createBookingDto)
+        console.log(createBookingDto)
+        await this.create(createBookingDto)
       })
       )
     } catch (error) {
@@ -104,7 +105,6 @@ export class BookingsService {
     }
 
   }
-
 
   /**
    * 
@@ -139,7 +139,6 @@ export class BookingsService {
       });
   }
 
-
   /**
    * 
    * @param id 
@@ -164,7 +163,7 @@ export class BookingsService {
     if (!booking)
       return {} as BareBookingDTO
 
-    let price = 0 
+    let price = 0
     if (booking.activities.length != 0) {
       price = booking.activities.reduce((acc, act) => { return acc + act.price }, 0)
     }
@@ -241,42 +240,50 @@ export class BookingsService {
    * @param shopId 
    * @returns 
    */
-  async findForCustomersTable(shopId: number): Promise<DisplayCustomerBooking[]> {
-    const subQuery = this.bookingRepository
-      .createQueryBuilder("sub")
-      .select("MAX(sub.checkInDate)", "maxDate")
-      .addSelect("sub.customerId", "customerId")
-      .innerJoin("sub.shop", "subShop")
-      .where("subShop.id = :shopId", { shopId })
-      .groupBy("sub.customerId");
-
-    const latestBookings = await this.bookingRepository
+  /**
+     * Return exactly one (the latest) booking per customer for this shop,
+     * even on MySQL.
+     */
+  async findForCustomersTable(
+    shopId: number,
+  ): Promise<DisplayCustomerBooking[]> {
+    const qb = this.bookingRepository
       .createQueryBuilder("booking")
-      .innerJoin(
-        "(" + subQuery.getQuery() + ")",
-        "latest",
-        "booking.customerId = latest.customerId AND booking.checkInDate = latest.maxDate"
-      )
+      // bring in all the relations you need
       .leftJoinAndSelect("booking.customer", "customer")
       .leftJoinAndSelect("booking.bookingType", "bookingType")
       .leftJoinAndSelect("booking.activities", "activities")
-      .innerJoin("booking.shop", "shop")
-      .where("shop.id = :shopId", { shopId })
-      .orderBy("booking.checkInDate", "DESC")
-      .setParameters(subQuery.getParameters())
-      .getMany();
+      // only this shop
+      .where("booking.shopId = :shopId", { shopId })
+      // only keep the booking whose id is the most recent for that customer
+      .andWhere((qb) => {
+        const sub = qb
+          .subQuery()
+          .select("b2.id")
+          .from(Booking, "b2")
+          .where("b2.customerId = booking.customerId")
+          .andWhere("b2.shopId = :shopId", { shopId })
+          .orderBy("b2.checkInDate", "DESC")
+          .limit(1)
+          .getQuery();
+        // this turns into: booking.id = ( SELECT b2.id ... LIMIT 1 )
+        return "booking.id = " + sub;
+      })
+      // optional: ensure consistent ordering in case you paginate or just want newest first
+      .orderBy("booking.checkInDate", "DESC");
 
-    return latestBookings.map((value) => ({
-      customerId: value.customer.id,
-      name: `${value.customer.firstName} ${value.customer.lastName}`,
-      status: value.activities.length === 0 ? "Check in" : "Booked",
-      activity: value.bookingType ? value.bookingType.label : "",
-      date: value.checkInDate,
-      lastBookingType: value.bookingType ? value.bookingType.label : "",
-      bookingId: value.id
+    const latestBookings = await qb.getMany();
+
+    return latestBookings.map((b) => ({
+      customerId: b.customer.id,
+      name: `${b.customer.firstName} ${b.customer.lastName}`,
+      status: b.activities.length === 0 ? "Check in" : "Booked",
+      activity: b.bookingType?.label ?? "",
+      date: b.checkInDate,
+      lastBookingType: b.bookingType?.label ?? "",
+      bookingId: b.id,
     }));
   }
-
 
   /**
    * 

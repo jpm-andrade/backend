@@ -27,4 +27,7 @@ export class BaseBookingType {
 
     @ApiProperty()
     actvityLimit?:number
+    
+    @ApiProperty()
+    serviceCost?: number
 }

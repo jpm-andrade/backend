@@ -22,7 +22,7 @@ export class BookingsController {
   }
 
 
-  @Post()
+  @Post("/bulk")
   createBulk(
     @Body() bulkcreateBookingDto: BulkCreateBookingDto
     ) {
@@ -33,7 +33,8 @@ export class BookingsController {
   findAll() {
     return this.bookingsService.findAll();
   }
-
+  
+  @Public()
   @Get('/customer/shop/:id')
   findForCustomerTable(@Param('id') id: string) {
     return this.bookingsService.findForCustomersTable(+id);

@@ -32,4 +32,7 @@ export class BookingType {
     default: 1
   })
   actvityLimit: number
+
+  @Column({nullable:true})
+  serviceCost: number
 }

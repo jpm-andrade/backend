@@ -35,6 +35,7 @@ export class BookingTypeService {
     bookingType.packageDeal = createBookingTypeDto.packageDeal
     bookingType.isCourse = createBookingTypeDto.isCourse
     bookingType.needsCert = createBookingTypeDto.needsCert
+    bookingType.serviceCost = createBookingTypeDto.serviceCost ? createBookingTypeDto.serviceCost : 0
 
 
     return this.bookingTypeRepository.save(bookingType);
@@ -75,9 +76,10 @@ export class BookingTypeService {
         label: bk.label,
         price: bk.bookingPrice,
         packageDeal: bk.packageDeal,
-        isCourse:bk.isCourse,
+        isCourse: bk.isCourse,
         actvityLimit: bk.actvityLimit,
-        needsCert: bk.needsCert
+        needsCert: bk.needsCert,
+        serviceCost: bk.serviceCost
       }
     })
 
@@ -98,8 +100,10 @@ export class BookingTypeService {
       bookingType.packageDeal = updateBookingTypeDto.packageDeal
       bookingType.isCourse = updateBookingTypeDto.isCourse
       bookingType.needsCert = updateBookingTypeDto.needsCert
+      bookingType.serviceCost = updateBookingTypeDto.serviceCost ? updateBookingTypeDto.serviceCost : 0
 
 
+      console.log(bookingType)
       return this.bookingTypeRepository.save(bookingType);
     }
 
