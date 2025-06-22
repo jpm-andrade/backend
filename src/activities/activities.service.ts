@@ -8,6 +8,8 @@ import { CreateActivityInternal } from './dto/create-activity-internal.dto';
 import { Employee } from 'src/employees/entities/employee.entity';
 import { Booking } from 'src/bookings/entities/booking.entity';
 import { startOfMonth, endOfMonth, format } from 'date-fns';
+import { UpdateServiceActivity } from './dto/update-service-activity.dto';
+import { compareSync } from 'bcrypt';
 
 @Injectable()
 export class ActivitiesService {
@@ -153,19 +155,13 @@ export class ActivitiesService {
       if (booking.bookingType.isCourse) {
         if (employee.freelancer) {
           // Case 1: Course + freelancer = 25% of bookingPrice
-          wage = (booking.bookingType.bookingPrice ?? 0) * 0.25;
+          wage = ((activity.price ?? 0) - booking.serviceCost / booking.activities.length) * 0.25;
         } else {
           // Case 3: Course + non-freelancer = commissionValue logic
-          wage = (activity.price ?? 0) * (activity.commissionValue ?? 0);
+          wage = ((activity.price ?? 0) - booking.serviceCost / booking.activities.length) * (activity.commissionValue ?? 0) / 100;
         }
       } else {
-        if (employee.freelancer) {
-          // Case 2: Not course + freelancer = fixedRate
-          wage = employee.fixedRate ?? 0;
-        } else {
-          // Case 4: Not course + non-freelancer = fixedRate
-          wage = employee.fixedRate ?? 0;
-        }
+        wage = employee.fixedRate ?? 0;
       }
 
       grouped[month][employeeId].total += Math.max(wage, 0);
@@ -182,17 +178,47 @@ export class ActivitiesService {
     return this.activityRepository.find({
       relations: {
         booking: true,
-        employee:true
+        employee: true
       }
     });
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} activity`;
+    return this.activityRepository.findOne({
+      relations: {
+        employee: true
+      },
+      where: {
+        id: id
+      }
+    });
   }
 
   update(id: number, updateActivityDto: UpdateActivityDto) {
     return `This action updates a #${id} activity`;
+  }
+
+  async updateService(id: number, updateActivityDto: UpdateServiceActivity) {
+    let activity = await this.activityRepository.findOneBy({ id: id })
+
+    if (!activity) {
+
+    } else {
+      console.log(updateActivityDto.commissionValue)
+      activity.commissionValue = updateActivityDto.commissionValue
+      activity.price = updateActivityDto.price
+
+      const employee = await this.employeeRepository.findOneBy({ id: updateActivityDto.employeeId })
+
+      if (!employee) {
+        throw new NotFoundException(`Employee ${updateActivityDto.employeeId} not found`);
+      }
+
+      activity.employee = employee
+      console.log(activity.commissionValue)
+      return this.activityRepository.save(activity)
+
+    }
   }
 
   remove(id: number) {

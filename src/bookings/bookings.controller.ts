@@ -7,6 +7,7 @@ import { ApiOkResponse, ApiOperation, ApiParam, ApiQuery } from '@nestjs/swagger
 import { GetBookingsByDayDto } from './dto/dashboard-chart.dto';
 import { TodayStatsDto } from './dto/daily-stats.dto';
 import { BulkCreateBookingDto } from './dto/create-bulk-booking.dto';
+import { UpdateServiceBooking } from './dto/update-service-booking.dto';
 
 
 
@@ -92,11 +93,16 @@ export class BookingsController {
     return this.bookingsService.getBookingsByDay( +id, query.startDate, query.endDate);
   }
 
-
   @Public()
   @Get('general/:id')
   findOne(@Param('id') id: string) {
     return this.bookingsService.findOne(+id);
+  }
+
+  @Public()
+  @Get('service/:id')
+  findBookingServiceById(@Param('id') id: string) {
+    return this.bookingsService.findBookingServiceById(+id);
   }
 
   @Public()
@@ -120,6 +126,11 @@ export class BookingsController {
   @Put(':id')
   update(@Param('id') id: string, @Body() updateBookingDto: UpdateBookingDto) {
     return this.bookingsService.update(+id, updateBookingDto);
+  }
+
+  @Put('/service/:id')
+  updateService(@Param('id') id: string, @Body() updateBookingDto: UpdateServiceBooking) {
+    return this.bookingsService.updateService(+id, updateBookingDto);
   }
 
   @Delete(':id')

@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateBookingDto } from './dto/create-booking.dto';
 import { UpdateBookingDto } from './dto/update-booking.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Between, Repository } from 'typeorm';
+import { Between, IsNull, Not, Repository } from 'typeorm';
 import { Booking } from './entities/booking.entity';
 import { Shop } from 'src/shops/entities/shop.entity';
 import { Customer } from 'src/customers/entities/customer.entity';
@@ -13,9 +13,11 @@ import { CustomerDetailsBookingTable } from './dto/customers-table-booking.dto';
 import { DisplayCustomerBooking } from './dto/display-customer-booking.dto';
 import { BulkCreateBookingDto } from './dto/create-bulk-booking.dto';
 import { BareActivitiesDTO, BareBookingDTO } from './dto/ui-bare-booking.dto';
+import { UpdateServiceBooking } from './dto/update-service-booking.dto';
 
 @Injectable()
 export class BookingsService {
+  
   constructor(
     @InjectRepository(Booking)
     private readonly bookingRepository: Repository<Booking>,
@@ -79,7 +81,7 @@ export class BookingsService {
 
       }
     })
-    console.log(actData)
+  
     if (actData)
       await this.activitiesService.bulkCreate(actData)
 
@@ -91,16 +93,13 @@ export class BookingsService {
    * @param createBookingDto 
    */
   createBulk(createBookingDto: BulkCreateBookingDto) {
-    console.log(createBookingDto)
     try {
       Promise.all(createBookingDto.customerIdList.map(async (customer) => {
         createBookingDto.customerId = customer
-        console.log(createBookingDto)
         await this.create(createBookingDto)
       })
       )
     } catch (error) {
-      console.log(error)
       throw new Error(error)
     }
 
@@ -189,6 +188,22 @@ export class BookingsService {
       }),
     }
 
+  }
+
+  async findBookingServiceById(id: number) {
+    const booking = await this.bookingRepository.findOne({
+      relations:{
+        bookingType:true
+      },
+      where:{
+        id:id
+      }
+    })
+    return {
+      bookingType:booking?.bookingType,
+      date: booking?.checkInDate,
+      serviceCost: booking?.serviceCost ?? 0
+    }
   }
 
   /**
@@ -301,12 +316,16 @@ export class BookingsService {
       where: {
         shop: {
           id: id
-        }
+        },
+        bookingType: Not(IsNull())
       }
     });
 
     return bookings.map((b) => {
       // Dedupe employees across activities
+      console.log(b)
+
+
       const uniqueEmps = Array.from(
         new Map(
           b.activities.map((a) => [a.employee.id, a.employee])
@@ -637,8 +656,6 @@ export class BookingsService {
     };
   }
 
-
-
   /**
    * 
    * @param id 
@@ -715,9 +732,37 @@ export class BookingsService {
         price: value.price
       }
     })
-    console.log(actData)
     if (actData)
       await this.activitiesService.bulkUpdate(actData)
+
+    return this.findOne(create.id)
+  }
+
+
+  /**
+   * 
+   * @param id 
+   * @param updateBookingDto 
+   * @returns 
+   */
+  async updateService(id: number, updateBookingDto: UpdateServiceBooking) {
+    const booking = await this.bookingRepository.findOneBy({ id: id })
+
+    if (!booking) {
+      throw Error()
+    }
+
+    const bookingType = await this.bookingTypeRepository.findOneBy({ id: updateBookingDto.bookingTypeId })
+
+    if (!bookingType) {
+      throw Error()
+    }
+
+    booking.bookingType = bookingType    
+    booking.serviceCost = updateBookingDto.serviceCost
+
+    const create = await this.bookingRepository.save(booking);
+
 
     return this.findOne(create.id)
   }
