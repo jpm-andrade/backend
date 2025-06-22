@@ -35,4 +35,7 @@ export class BookingType {
 
   @Column({nullable:true})
   serviceCost: number
+
+  @Column({default:true})
+  isActive:boolean
 }

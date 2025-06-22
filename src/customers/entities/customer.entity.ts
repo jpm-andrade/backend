@@ -23,7 +23,7 @@ export class Customer {
   country: string;
 
   @Column()
-  referedFrom: string;
+  referedFrom?: string;
 
   @Column({nullable:true})
   phoneNumber:string

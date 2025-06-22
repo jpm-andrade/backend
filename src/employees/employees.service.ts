@@ -28,7 +28,7 @@ export class EmployeesService {
 
   async create(createEmployeeDto: CreateEmployeeDto) {
     const employee = new Employee()
-
+    console.log(createEmployeeDto)
     const shop = await this.shopRepository.findOneBy({ id: createEmployeeDto.shopId })
 
     if (!shop) {
@@ -51,6 +51,8 @@ export class EmployeesService {
 
 
     const savedEmployee = await this.employeeRepository.save(employee)
+
+    console.log(savedEmployee)
 
     createEmployeeDto.languageIds?.map(async (id) => {
       let language = await this.languageRepository.findOneBy({

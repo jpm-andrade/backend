@@ -17,7 +17,7 @@ import { UpdateServiceBooking } from './dto/update-service-booking.dto';
 
 @Injectable()
 export class BookingsService {
-  
+
   constructor(
     @InjectRepository(Booking)
     private readonly bookingRepository: Repository<Booking>,
@@ -81,7 +81,7 @@ export class BookingsService {
 
       }
     })
-  
+
     if (actData)
       await this.activitiesService.bulkCreate(actData)
 
@@ -169,7 +169,7 @@ export class BookingsService {
 
     return {
       id: booking.id,
-      bookingTypeId: booking.bookingType.id,
+      bookingTypeId: booking.bookingType ? booking.bookingType.id : undefined,
       checkInDate: booking.checkInDate,
       customerId: booking.customer.id,
       deposit: booking.deposit,
@@ -192,15 +192,15 @@ export class BookingsService {
 
   async findBookingServiceById(id: number) {
     const booking = await this.bookingRepository.findOne({
-      relations:{
-        bookingType:true
+      relations: {
+        bookingType: true
       },
-      where:{
-        id:id
+      where: {
+        id: id
       }
     })
     return {
-      bookingType:booking?.bookingType,
+      bookingType: booking?.bookingType,
       date: booking?.checkInDate,
       serviceCost: booking?.serviceCost ?? 0
     }
@@ -316,6 +316,69 @@ export class BookingsService {
       where: {
         shop: {
           id: id
+        },
+        bookingType: Not(IsNull())
+      }
+    });
+
+    return bookings.map((b) => {
+      // Dedupe employees across activities
+      console.log(b)
+
+
+      const uniqueEmps = Array.from(
+        new Map(
+          b.activities.map((a) => [a.employee.id, a.employee])
+        ).values()
+      );
+
+      return {
+        id: b.id,
+        // concat firstName + lastName
+        employees: uniqueEmps.map((e) => ({
+          id: e.id,
+          name: `${e.firstName} ${e.lastName}`,
+        })),
+        bookingType: {
+          id: b.bookingType.id,
+          label: b.bookingType.label,
+        },
+        date: b.checkInDate.toISOString(),
+        serviceCost: b.serviceCost ?? 0,
+        activities: b.activities.map((a) => ({
+          id: a.id,
+          employee: {
+            id: a.employee.id,
+            name: `${a.employee.firstName} ${a.employee.lastName}`,
+          },
+          commission: a.commissionValue ?? 0,
+          price: a.price,
+        })),
+      };
+    });
+  }
+
+  /**
+   * 
+   * @param id 
+   * 
+   * @returns 
+   */
+  async getBookingsWithActivitiesByEmployeeId(id: number, employeeId:number): Promise<any[]> {
+    const bookings = await this.bookingRepository.find({
+      relations: [
+        'bookingType',            // BookingType { id, label, … } :contentReference[oaicite:0]{index=0}
+        'activities',             // Activity[] :contentReference[oaicite:1]{index=1}
+        'activities.employee',    // Employee on each Activity :contentReference[oaicite:2]{index=2}
+      ],
+      where: {
+        shop: {
+          id: id
+        },
+        activities:{
+          employee:{
+            id:employeeId
+          }
         },
         bookingType: Not(IsNull())
       }
@@ -758,7 +821,7 @@ export class BookingsService {
       throw Error()
     }
 
-    booking.bookingType = bookingType    
+    booking.bookingType = bookingType
     booking.serviceCost = updateBookingDto.serviceCost
 
     const create = await this.bookingRepository.save(booking);

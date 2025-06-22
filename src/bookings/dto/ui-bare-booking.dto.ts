@@ -5,7 +5,7 @@ export type BareBookingDTO = {
     language: string
     shopId: number;
     customerId: number;
-    bookingTypeId: number;
+    bookingTypeId?: number;
     price: number;
     deposit: number;
     discount: number

@@ -26,7 +26,7 @@ export class BookingsController {
   @Post("/bulk")
   createBulk(
     @Body() bulkcreateBookingDto: BulkCreateBookingDto
-    ) {
+  ) {
     return this.bookingsService.createBulk(bulkcreateBookingDto);
   }
 
@@ -34,7 +34,7 @@ export class BookingsController {
   findAll() {
     return this.bookingsService.findAll();
   }
-  
+
   @Public()
   @Get('/customer/shop/:id')
   findForCustomerTable(@Param('id') id: string) {
@@ -50,6 +50,12 @@ export class BookingsController {
   async getActivitiesPageData(@Param('id') id: string) {
     return this.bookingsService.getBookingsWithActivities(+id);
   }
+
+  @Get('activities-page/shop/:id/employee/:empId')
+  async getEmployeePageData(@Param('id') id: string, @Param('empId') empId: string) {
+    return this.bookingsService.getBookingsWithActivitiesByEmployeeId(+id, +empId);
+  }
+
 
 
   @Public()
@@ -90,7 +96,7 @@ export class BookingsController {
     @Param('id') id: string,
     @Query() query: GetBookingsByDayDto,
   ) {
-    return this.bookingsService.getBookingsByDay( +id, query.startDate, query.endDate);
+    return this.bookingsService.getBookingsByDay(+id, query.startDate, query.endDate);
   }
 
   @Public()

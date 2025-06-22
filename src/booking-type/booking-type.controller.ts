@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Put, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Put, Param, Delete, Query } from '@nestjs/common';
 import { BookingTypeService } from './booking-type.service';
 import { CreateBookingTypeDto } from './dto/create-booking-type.dto';
 import { UpdateBookingTypeDto } from './dto/update-booking-type.dto';
@@ -33,6 +33,11 @@ export class BookingTypeController {
   @Put(':id')
   update(@Param('id') id: string, @Body() updateBookingTypeDto: UpdateBookingTypeDto) {
     return this.bookingTypeService.update(+id, updateBookingTypeDto);
+  }
+
+  @Put('/inactive/:id')
+  updateInactive(@Param('id') id: string, @Query('active') active:boolean) {
+    return this.bookingTypeService.updateInactive(+id, active);
   }
 
   @Delete(':id')

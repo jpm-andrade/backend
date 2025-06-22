@@ -9,6 +9,7 @@ import { ShopsService } from 'src/shops/shops.service';
 
 @Injectable()
 export class BookingTypeService {
+  
 
   constructor(
     @InjectRepository(BookingType)
@@ -79,7 +80,8 @@ export class BookingTypeService {
         isCourse: bk.isCourse,
         actvityLimit: bk.actvityLimit,
         needsCert: bk.needsCert,
-        serviceCost: bk.serviceCost
+        serviceCost: bk.serviceCost,
+        isActive: bk.isActive
       }
     })
 
@@ -101,12 +103,24 @@ export class BookingTypeService {
       bookingType.isCourse = updateBookingTypeDto.isCourse
       bookingType.needsCert = updateBookingTypeDto.needsCert
       bookingType.serviceCost = updateBookingTypeDto.serviceCost ? updateBookingTypeDto.serviceCost : 0
+      bookingType.isActive = updateBookingTypeDto.isActive == undefined ? true : updateBookingTypeDto.isActive
+
 
 
       console.log(bookingType)
       return this.bookingTypeRepository.save(bookingType);
     }
 
+  }
+
+  async updateInactive(id: number, active: boolean) {
+    let bookingType = await this.bookingTypeRepository.findOneBy({ id: id })
+
+    if (!bookingType) {
+    } else {
+      bookingType.isActive = active
+      return this.bookingTypeRepository.save(bookingType);
+    }
   }
 
   remove(id: number) {

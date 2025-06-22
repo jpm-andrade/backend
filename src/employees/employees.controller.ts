@@ -6,6 +6,7 @@ import { Public } from 'src/auth/strategy/public-strategy';
 import { ApiOperation, ApiParam, ApiResponse } from '@nestjs/swagger';
 import { Employee } from './entities/employee.entity';
 
+@Public()
 @Controller('employees')
 export class EmployeesController {
   constructor(private readonly employeesService: EmployeesService) {}

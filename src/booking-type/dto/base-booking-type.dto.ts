@@ -30,4 +30,7 @@ export class BaseBookingType {
     
     @ApiProperty()
     serviceCost?: number
+
+    @ApiProperty()
+    isActive?: boolean
 }
