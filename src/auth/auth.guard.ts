@@ -5,7 +5,6 @@ import {
     UnauthorizedException,
   } from '@nestjs/common';
   import { JwtService } from '@nestjs/jwt';
-  import { jwtConstants } from './constants/constants';
   import { Request } from 'express';
   import { Reflector } from '@nestjs/core';
 import { IS_PUBLIC_KEY } from './strategy/public-strategy';
@@ -29,7 +28,7 @@ import { IS_PUBLIC_KEY } from './strategy/public-strategy';
         const payload = await this.jwtService.verifyAsync(
           token,
           {
-            secret: jwtConstants.secret
+            secret: process.env.JWT_SECRET!
           }
         );
         // 💡 We're assigning the payload to the request object here

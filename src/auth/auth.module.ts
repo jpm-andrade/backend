@@ -4,7 +4,6 @@ import { AuthService } from './auth.service';
 import { UsersModule } from '../users/users.module';
 import { JwtModule } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { jwtConstants } from './constants/constants';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from './auth.guard';
 import { User } from 'src/users/entities/user.entity';
@@ -13,7 +12,7 @@ import { User } from 'src/users/entities/user.entity';
     UsersModule,
     JwtModule.register({
       global: true,
-      secret: jwtConstants.secret,
+      secret: process.env.JWT_SECRET!,
       signOptions: { expiresIn: '1d' },
     }),
     TypeOrmModule.forFeature([User]),
