@@ -20,6 +20,7 @@ import { EmployeeLanguagesModule } from './employee-languages/employee-languages
 import { CertificationsModule } from './certifications/certifications.module';
 import { EmployeeRolesModule } from './employee-roles/employee-roles.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { AppDataSource } from 'data-source';
 
 @Module({
   imports: [
@@ -47,23 +48,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     }),
 
     TypeOrmModule.forRootAsync({
-      imports: [ConfigModule],             // ensure ConfigModule loaded
-      useFactory: (config: ConfigService) => ({
-        type: 'mysql',
-        host: config.get<string>('DATABASE_HOST'),
-        port: config.get<number>('DATABASE_PORT'),
-        username: config.get<string>('DATABASE_USER'),
-        password: config.get<string>('DATABASE_PASS'),
-        database: config.get<string>('DATABASE_NAME'),
-        // in prod you’ll run migrations separately; don't use synchronize:true
-        synchronize: false,
-        migrationsRun: true,
-        entities: [__dirname + '/**/*.entity{.ts,.js}'],
-        migrations: [__dirname + '/migrations/*{.ts,.js}'],
-        // you can also configure connection pool settings here
-      }),
-      inject: [ConfigService],
-      
+      useFactory: () => AppDataSource.options,
     }),
     UsersModule,
     OrganizationsModule,
